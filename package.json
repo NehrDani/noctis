@@ -1,0 +1,12 @@
+{
+  "name": "kickstart",
+  "version": "0.0.1",
+  "description": "Create cutting-egde, server-rendered React applications with zero configuration",
+  "repository": "git@github.com:NehrDani/kickstart.git",
+  "author": "Daniel Nehring <nehrdani@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "react-dev-utils": "^5.0.0"
+  }
+}
