@@ -18,8 +18,11 @@
     "node-sass": "^4.7.2",
     "postcss-loader": "^2.1.1",
     "react-dev-utils": "^5.0.0",
+    "react-error-overlay": "^4.0.0",
     "sass-loader": "^6.0.7",
+    "sockjs-client": "^1.1.4",
     "start-server-webpack-plugin": "^2.2.3",
+    "strip-ansi": "^4.0.0",
     "style-loader": "^0.20.2",
     "webpack": "^3.11.0",
     "webpack-node-externals": "^1.6.0"
