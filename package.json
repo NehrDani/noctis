@@ -6,6 +6,9 @@
   "author": "Daniel Nehring <nehrdani@gmail.com>",
   "license": "MIT",
   "private": true,
+  "bin": {
+    "kickstart": "./bin/kickstart.js"
+  },
   "dependencies": {
     "autoprefixer": "^8.1.0",
     "babel-core": "^6.26.0",
