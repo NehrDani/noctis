@@ -21,8 +21,9 @@ const createCompiler = require('../dev-utils/createCompiler')
 const isInteractive = process.stdout.isTTY
 
 // Tools like Cloud9 rely on this.
-const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 3000
-const HOST = process.env.HOST || '0.0.0.0'
+const port = parseInt(process.env.PORT, 10) || 3000
+const host = process.env.HOST || '0.0.0.0'
+const protocol = process.env.HTTPS ? 'https' : 'http'
 
 // Optimistically, we make the console look exactly like the output of our
 // FriendlyErrorsPlugin during compilation, so the user has immediate feedback.
@@ -48,14 +49,14 @@ const clientCompiler = createCompiler(webpack, clientConfig)
 
 // Create a new instance of Webpack-dev-server for our client assets.
 // This will actually run on a different port than the users app.
-const clientDevServer = new WebpackDevServer(clientCompiler, createDevServerConfig())
+const clientDevServer = new WebpackDevServer(
+  clientCompiler,
+  createDevServerConfig({ host, port, protocol })
+)
 
 // Start Webpack-dev-server
-clientDevServer.listen(
-  DEFAULT_PORT + 1,
-  err => {
-    if (err) {
-      logger.error(err)
-    }
+clientDevServer.listen(port + 1, err => {
+  if (err) {
+    logger.error(err)
   }
-)
+})
