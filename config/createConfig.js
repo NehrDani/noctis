@@ -6,6 +6,7 @@ const nodeExternals = require('webpack-node-externals')
 const StartServerPlugin = require('start-server-webpack-plugin')
 const autoprefixer = require('autoprefixer')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const FriendlyErrorsPlugin = require('../dev-utils/FriendlyErrorsPlugin')
 const paths = require('./paths')
 
 // Webpack config factory. The magic happens here!
@@ -92,15 +93,21 @@ module.exports = (
     },
     plugins: [
       // This makes debugging much easier as webpack will add filenames to
-      // modules
+      // modules.
       new webpack.NamedModulesPlugin(),
-      // Prevent creating multiple chunks for the server
+      // Prevent creating multiple chunks for the server.
       IS_NODE && new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 1
       }),
-      // Automatically start the server when done compiling
+      // Automatically start the server when done compiling.
       IS_NODE && IS_DEV && new StartServerPlugin({
         name: 'server.js'
+      }),
+      // Use our own FriendlyErrorsPlugin during development.
+      IS_DEV && new FriendlyErrorsPlugin({
+        verbose: process.env.VERBOSE,
+        target,
+        onSuccessMessage: `Your application is running at ${protocol}://${host}:${port}`
       })
     ].filter(Boolean)
   }
