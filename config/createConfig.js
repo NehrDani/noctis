@@ -9,18 +9,22 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const FriendlyErrorsPlugin = require('../dev-utils/FriendlyErrorsPlugin')
 const paths = require('./paths')
 
+const ENV = process.env
+const protocol = ENV.PROTOCOL || 'http'
+const host = ENV.HOST || '0.0.0.0'
+const port = ENV.PORT || 3000
+
 // Webpack config factory. The magic happens here!
 module.exports = (
   target = 'web',
-  env = 'development',
-  { host = 'localhost', port = 3000, protocol = 'http' }
+  env = 'dev'
 ) => {
   const IS_NODE = target === 'node'
   const IS_WEB = target === 'web'
-  const IS_PROD = env === 'production'
-  const IS_DEV = env === 'development'
+  const IS_PROD = env === 'prod'
+  const IS_DEV = env === 'dev'
 
-  const publicPath = IS_DEV ? `${protocol}://${host}:${port}/` : '/'
+  const publicPath = IS_DEV ? `${protocol}://${host}:${port + 1}/` : '/'
 
   const babelOptions = {
     babelrc: true,
