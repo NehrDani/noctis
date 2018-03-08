@@ -7,6 +7,10 @@ module.exports = function ({ host = '0.0.0.0', port = 3001, protocol = 'http' })
   return {
     // Enable gzip compression of generated files.
     compress: true,
+    // Enable CORS
+    headers: {
+      'Access-Control-Allow-Origin': '*'
+    },
     // Silence WebpackDevServer's own logs since they're generally not useful.
     // It will still show compile warnings and errors with this setting.
     clientLogLevel: 'none',
@@ -15,7 +19,7 @@ module.exports = function ({ host = '0.0.0.0', port = 3001, protocol = 'http' })
     // updated. The WebpackDevServer client is included as an entry point
     // in the Webpack development configuration. Note that only changes
     // to CSS are currently hot reloaded. JS changes will refresh the browser.
-    hot: false, // TODO module hot reloading
+    hot: true,
     // WebpackDevServer is noisy by default so we emit custom message instead
     // by listening to the compiler events with `compiler.plugin` calls above.
     quiet: true,
