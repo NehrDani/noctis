@@ -17,6 +17,7 @@ module.exports = {
       imports: 'only-multiline',
       exports: 'only-multiline',
       functions: 'ignore'
-    }]
+    }],
+    'no-console': 'off'
   }
 }
