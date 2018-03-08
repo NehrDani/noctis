@@ -16,6 +16,19 @@ var launchEditorEndpoint = require('react-dev-utils/launchEditorEndpoint');
 var formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 var ErrorOverlay = require('react-error-overlay');
 
+ErrorOverlay.setEditorHandler(function editorHandler(errorLocation) {
+  // Keep this sync with errorOverlayMiddleware.js
+  fetch(
+    launchEditorEndpoint +
+      '?fileName=' +
+      window.encodeURIComponent(errorLocation.fileName) +
+      '&lineNumber=' +
+      window.encodeURIComponent(errorLocation.lineNumber || 1) +
+      '&colNumber=' +
+      window.encodeURIComponent(errorLocation.colNumber || 1)
+  );
+});
+
 // We need to keep track of if there has been a runtime error.
 // Essentially, we cannot guarantee application state was not corrupted by the
 // runtime error. To prevent confusing behavior, we forcibly reload the entire
@@ -24,16 +37,10 @@ var ErrorOverlay = require('react-error-overlay');
 // See https://github.com/facebook/create-react-app/issues/3096
 var hadRuntimeError = false;
 ErrorOverlay.startReportingRuntimeErrors({
-  launchEditorEndpoint: url.format({
-    protocol: window.location.protocol,
-    hostname: window.location.hostname,
-    port: parseInt(process.env.PORT, 10) + 1 || window.location.port,
-    pathname: launchEditorEndpoint,
-  }),
   onError: function() {
     hadRuntimeError = true;
   },
-  filename: process.env.REACT_BUNDLE_PATH || '/client.js',
+  filename: '/client.js',
 });
 
 if (module.hot && typeof module.hot.dispose === 'function') {
@@ -48,7 +55,7 @@ var connection = new SockJS(
   url.format({
     protocol: window.location.protocol,
     hostname: window.location.hostname,
-    port: parseInt(process.env.PORT, 10) + 1 || window.location.port,
+    port: 3001,
     // Hardcoded in WebpackDevServer
     pathname: '/sockjs-node',
   })
