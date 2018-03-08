@@ -21,7 +21,7 @@ var ErrorOverlay = require('react-error-overlay');
 // runtime error. To prevent confusing behavior, we forcibly reload the entire
 // application. This is handled below when we are notified of a compile (code
 // change).
-// See https://github.com/facebookincubator/create-react-app/issues/3096
+// See https://github.com/facebook/create-react-app/issues/3096
 var hadRuntimeError = false;
 ErrorOverlay.startReportingRuntimeErrors({
   launchEditorEndpoint: url.format({
