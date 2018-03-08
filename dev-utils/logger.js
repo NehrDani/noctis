@@ -44,7 +44,7 @@ const write = (type, text, verbose) => {
   // Adds optional verbose output
   if (verbose && typeof verbose === 'object') {
     console.dir(verbose, { depth: 15 })
-  } else {
+  } else if (verbose) {
     console.log(`\n\n${verbose}`)
   }
 
