@@ -34,7 +34,9 @@ module.exports = (
     minify: IS_DEV,
     modules: true,
     importLoaders: 1,
-    localIdentName: IS_DEV ? '[path]__[name]__[local]--[hash:base64:5]' : '[hash:base64:7]'
+    localIdentName: IS_DEV
+      ? '[path]__[name]__[local]--[hash:base64:5]'
+      : '[hash:base64:7]'
   }
   const postCssOptions = {
     ident: 'postcss',
@@ -107,6 +109,10 @@ module.exports = (
       IS_NODE && IS_DEV && new StartServerPlugin({
         name: 'server.js'
       }),
+      // Add hot module replacement
+      IS_DEV && new webpack.HotModuleReplacementPlugin(),
+      // Supress errors to console (we use our own logger)
+      IS_DEV && new webpack.NoEmitOnErrorsPlugin(),
       // Use our own FriendlyErrorsPlugin during development.
       IS_DEV && new FriendlyErrorsPlugin({
         verbose: process.env.VERBOSE,
@@ -133,11 +139,11 @@ module.exports = (
   }
 
   if (IS_WEB && IS_DEV) {
-    // Setup Webpack Dev Server on port 3000 and
     // Specify client entry point /src/client.js
 
     config.entry = {
       client: [
+        require.resolve('../dev-utils/webpackHotDevClient'),
         path.resolve(paths.appSrc, 'client.js')
       ]
     }
