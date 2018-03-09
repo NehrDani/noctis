@@ -16,6 +16,7 @@
     "css-loader": "^0.28.10",
     "extract-text-webpack-plugin": "^3.0.2",
     "node-sass": "^4.7.2",
+    "postcss-flexbugs-fixes": "^3.3.0",
     "postcss-loader": "^2.1.1",
     "react-dev-utils": "^5.0.0",
     "react-error-overlay": "^4.0.0",

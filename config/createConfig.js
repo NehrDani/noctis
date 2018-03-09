@@ -39,13 +39,16 @@ module.exports = (
       : '[hash:base64:7]'
   }
   const postCssOptions = {
+    // Necessary for external CSS imports to work
+    // https://github.com/facebook/create-react-app/issues/2677
     ident: 'postcss',
     plugins: () => [
       autoprefixer({
         browsers: [
           'last 2 versions',
           'not ie < 11'
-        ]
+        ],
+        flexbox: 'no-2009'
       })
     ]
   }
