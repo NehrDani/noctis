@@ -2,6 +2,8 @@
 
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware')
 const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMiddleware')
+const ignoredFiles = require('react-dev-utils/ignoredFiles')
+const paths = require('./paths')
 
 module.exports = function ({ host = '0.0.0.0', port = 3001, protocol = 'http' }) {
   return {
@@ -28,7 +30,7 @@ module.exports = function ({ host = '0.0.0.0', port = 3001, protocol = 'http' })
     // src/node_modules is not ignored to support absolute imports
     // https://github.com/facebook/create-react-app/issues/1065
     watchOptions: {
-      ignored: /node_modules/,
+      ignored: ignoredFiles(paths.appSrc),
     },
     // Enable HTTPS if the HTTPS environment variable is set to 'true'
     https: protocol === 'https',
