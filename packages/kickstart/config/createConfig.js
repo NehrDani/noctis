@@ -151,7 +151,7 @@ module.exports = (
         // When you save a file, the client will either apply hot updates (in case
         // of CSS changes), or refresh the page (in case of JS changes). When you
         // make a syntax error, this client will display a syntax error overlay.
-        require.resolve('../dev-utils/webpackHotDevClient'),
+        require.resolve('kickstart-dev-utils/webpackHotDevClient'),
         path.resolve(paths.appClientJs)
       ]
     }
