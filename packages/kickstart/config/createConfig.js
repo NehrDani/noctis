@@ -131,11 +131,11 @@ module.exports = (
 
     config.externals = [nodeExternals()]
 
-    config.entry = [path.resolve(paths.appSrc, 'server.js')]
+    config.entry = [path.resolve(paths.appServerJs)]
 
     // Specify webpack Node.js output path and filename
     config.output = {
-      path: path.resolve(paths.appBuild),
+      path: path.resolve(paths.appServerBuild),
       publicPath,
       filename: 'server.js'
     }
@@ -152,13 +152,13 @@ module.exports = (
         // of CSS changes), or refresh the page (in case of JS changes). When you
         // make a syntax error, this client will display a syntax error overlay.
         require.resolve('../dev-utils/webpackHotDevClient'),
-        path.resolve(paths.appSrc, 'client.js')
+        path.resolve(paths.appClientJs)
       ]
     }
 
     // Configure client-side bundles output. Note the public path is set to 3000
     config.output = {
-      path: path.resolve(paths.appBuild),
+      path: path.resolve(paths.appClientBuild),
       publicPath,
       pathinfo: true,
       filename: '[name].js',
@@ -172,7 +172,7 @@ module.exports = (
     // Specify production entry point
     config.entry = {
       client: [
-        path.resolve(paths.appSrc, 'client.js')
+        path.resolve(paths.appClientJs)
       ]
     }
 
@@ -180,7 +180,7 @@ module.exports = (
     // changed the publiPath to just '/' from http://localhost:8080. This is because
     // we will only be using one port in production.
     config.output = {
-      path: path.resolve(paths.appBuild),
+      path: path.resolve(paths.appClientBuild),
       publicPath,
       filename: '[chunkhash:8].js',
       chunkFilename: '[chunkhash:8].chunk.js'
