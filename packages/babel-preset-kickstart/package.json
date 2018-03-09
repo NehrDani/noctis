@@ -1,0 +1,17 @@
+{
+  "name": "babel-preset-kickstart",
+  "version": "0.1.0",
+  "description": "Babel presets for Kickstart",
+  "main": "index.js",
+  "author": "Daniel Nehring <nehrdani@gmail.com>",
+  "repository": "git@github.com:NehrDani/kickstart.git",
+  "license": "MIT",
+  "files": [
+    "index.js"
+  ],
+  "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-plugin-dynamic-import": "^1.0.0",
+    "babel-preset-env": "^1.6.1"
+  }
+}
