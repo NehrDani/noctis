@@ -6,7 +6,7 @@ const nodeExternals = require('webpack-node-externals')
 const StartServerPlugin = require('start-server-webpack-plugin')
 const autoprefixer = require('autoprefixer')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const FriendlyErrorsPlugin = require('../dev-utils/FriendlyErrorsPlugin')
+const FriendlyErrorsPlugin = require('kickstart-dev-utils/FriendlyErrorsPlugin')
 const paths = require('./paths')
 
 const ENV = process.env

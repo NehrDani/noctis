@@ -15,8 +15,8 @@ const WebpackDevServer = require('webpack-dev-server')
 const clearConsole = require('react-dev-utils/clearConsole')
 const createConfig = require('../config/createConfig')
 const createDevServerConfig = require('../config/createDevServerConfig')
-const logger = require('../dev-utils/logger')
-const createCompiler = require('../dev-utils/createCompiler')
+const logger = require('kickstart-dev-utils/logger')
+const createCompiler = require('kickstart-dev-utils/createCompiler')
 
 const isInteractive = process.stdout.isTTY
 
