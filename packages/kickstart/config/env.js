@@ -74,7 +74,7 @@ const getClientEnvironment = publicUrl => {
         NODE_ENV: process.env.NODE_ENV || 'development',
         PORT: process.env.PORT || 3000,
         VERBOSE: !!process.env.VERBOSE,
-        HOST: process.env.HOST || 'localhost',
+        HOST: process.env.HOST || '0.0.0.0',
         // Useful for resolving the correct path to static assets in `public`.
         // For example, <img src={process.env.PUBLIC_URL + '/img/logo.png'} />.
         // This should only be used as an escape hatch. Normally you would put
