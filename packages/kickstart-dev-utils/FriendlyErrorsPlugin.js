@@ -13,14 +13,13 @@ let WEBPACK_DONE = false
 class WebpackErrorsPlugin {
   constructor (options = {}) {
     this.verbose = options.verbose
-    this.onSuccessMessage = options.onSuccessMessage
     this.target = options.target === 'web' ? 'CLIENT' : 'SERVER'
+    this.onSuccess = options.onSuccess
   }
 
   apply (compiler) {
     compiler.plugin('done', stats => {
-      const rawMessages = stats.toJson({}, true)
-      const messages = formatWebpackMessages(rawMessages)
+      const messages = formatWebpackMessages(stats.toJson({}, true))
       WEBPACK_COMPILING = false
       if (!messages.errors.length && !messages.warnings.length) {
         if (!WEBPACK_DONE) {
@@ -30,36 +29,30 @@ class WebpackErrorsPlugin {
           logger.done('Compiled successfully')
           WEBPACK_DONE = true
 
-          if (this.onSuccessMessage) {
-            logger.log(this.onSuccessMessage)
-            logger.log('')
+          if (this.onSuccess) {
+            this.onSuccess()
           }
         }
       }
 
-      if (
-        messages.errors.length &&
-        !(
-          rawMessages.errors &&
-          rawMessages.errors.length > 0 &&
-          (rawMessages.errors[0].includes('assets.json') ||
-            rawMessages.errors[0].includes("Module not found: Can't resolve"))
+      // If errors exist, only show errors.
+      if (messages.errors.length) {
+        // Only keep the first error. Others are often indicative
+        // of the same problem, but confuse the reader with noise.
+        const [error] = messages.errors
+        logger.error(
+          `Failed to compile ${this.target} with errors`,
+          error
         )
-      ) {
-        messages.errors.forEach(e => {
-          logger.error(
-            `Failed to compile ${this.target} with ${messages.errors
-              .length} errors`,
-            e
-          )
-        })
+        return
       }
 
+      // Show warnings if no errors were found.
       if (messages.warnings.length) {
         logger.warn(
           `Compiled with ${messages.warnings.length} warnings`
         )
-        messages.warnings.forEach(w => logger.log(w))
+        logger.log(messages.warnings.join('\n\n'))
       }
     })
 
