@@ -9,22 +9,17 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const FriendlyErrorsPlugin = require('kickstart-dev-utils/FriendlyErrorsPlugin')
 const paths = require('./paths')
 
-const ENV = process.env
-const protocol = ENV.PROTOCOL || 'http'
-const host = ENV.HOST || '0.0.0.0'
-const port = ENV.PORT || 3000
-
 // Webpack config factory. The magic happens here!
 module.exports = (
   target = 'web',
-  env = 'dev'
+  env = 'dev',
+  publicPath = '/',
+  onCompileSuccess = () => {},
 ) => {
   const IS_NODE = target === 'node'
   const IS_WEB = target === 'web'
   const IS_PROD = env === 'prod'
   const IS_DEV = env === 'dev'
-
-  const publicPath = IS_DEV ? `${protocol}://${host}:${port + 1}/` : '/'
 
   const babelOptions = {
     babelrc: true,
@@ -120,7 +115,7 @@ module.exports = (
       IS_DEV && new FriendlyErrorsPlugin({
         verbose: process.env.VERBOSE,
         target,
-        onSuccessMessage: `Your application is running at ${protocol}://${host}:${port}`
+        onSuccess: onCompileSuccess
       })
     ].filter(Boolean)
   }
