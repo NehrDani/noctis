@@ -10,15 +10,25 @@ process.on('unhandledRejection', err => {
   throw err
 })
 
+// Ensure environment variables are read.
+require('../config/env')
+
 const webpack = require('webpack')
 const WebpackDevServer = require('webpack-dev-server')
 const clearConsole = require('react-dev-utils/clearConsole')
-const createConfig = require('../config/createConfig')
-const createDevServerConfig = require('../config/createDevServerConfig')
+const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles')
 const logger = require('kickstart-dev-utils/logger')
 const createCompiler = require('kickstart-dev-utils/createCompiler')
+const createConfig = require('../config/createConfig')
+const createDevServerConfig = require('../config/createDevServerConfig')
+const paths = require('../config/paths')
 
 const isInteractive = process.stdout.isTTY
+
+// Warn and crash if required files are missing
+if (!checkRequiredFiles([paths.appServerJs, paths.appClientJs])) {
+  process.exit(1)
+}
 
 // Tools like Cloud9 rely on this.
 const port = parseInt(process.env.PORT, 10) || 3000
