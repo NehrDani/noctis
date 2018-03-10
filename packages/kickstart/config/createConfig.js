@@ -23,7 +23,8 @@ module.exports = (
 
   const babelOptions = {
     babelrc: true,
-    cacheDirectory: true
+    cacheDirectory: true,
+    presets: [require.resolve('babel-preset-kickstart')],
   }
   const cssOptions = {
     minify: IS_DEV,
@@ -31,7 +32,7 @@ module.exports = (
     importLoaders: 1,
     localIdentName: IS_DEV
       ? '[path]__[name]__[local]--[hash:base64:5]'
-      : '[hash:base64:7]'
+      : '[hash:base64:7]',
   }
   const postCssOptions = {
     // Necessary for external CSS imports to work
@@ -41,23 +42,23 @@ module.exports = (
       autoprefixer({
         browsers: [
           'last 2 versions',
-          'not ie < 11'
+          'not ie < 11',
         ],
-        flexbox: 'no-2009'
-      })
-    ]
+        flexbox: 'no-2009',
+      }),
+    ],
   }
   const cssLoaders = [
     IS_DEV && require.resolve('style-loader'),
     {
       loader: require.resolve(IS_NODE ? 'css-loader/locals' : 'css-loader'),
-      options: cssOptions
+      options: cssOptions,
     },
     {
       loader: require.resolve('postcss-loader'),
-      options: postCssOptions
+      options: postCssOptions,
     },
-    require.resolve('sass-loader')
+    require.resolve('sass-loader'),
   ].filter(Boolean)
 
   let config = {
@@ -76,9 +77,9 @@ module.exports = (
           use: [
             {
               loader: require.resolve('babel-loader'),
-              options: babelOptions
-            }
-          ]
+              options: babelOptions,
+            },
+          ],
         },
         // CSS Modules support
         {
@@ -87,13 +88,13 @@ module.exports = (
           use: IS_PROD
             ? ExtractTextPlugin.extract({
               fallback: {
-                loader: require.resolve('style-loader')
+                loader: require.resolve('style-loader'),
               },
-              use: cssLoaders
+              use: cssLoaders,
             })
-            : cssLoaders
-        }
-      ]
+            : cssLoaders,
+        },
+      ],
     },
     plugins: [
       // This makes debugging much easier as webpack will add filenames to
@@ -101,11 +102,11 @@ module.exports = (
       new webpack.NamedModulesPlugin(),
       // Prevent creating multiple chunks for the server.
       IS_NODE && new webpack.optimize.LimitChunkCountPlugin({
-        maxChunks: 1
+        maxChunks: 1,
       }),
       // Automatically start the server when done compiling.
       IS_NODE && IS_DEV && new StartServerPlugin({
-        name: 'server.js'
+        name: 'server.js',
       }),
       // Add hot module replacement
       IS_DEV && new webpack.HotModuleReplacementPlugin(),
@@ -115,9 +116,9 @@ module.exports = (
       IS_DEV && new FriendlyErrorsPlugin({
         verbose: process.env.VERBOSE,
         target,
-        onSuccess: onCompileSuccess
-      })
-    ].filter(Boolean)
+        onSuccess: onCompileSuccess,
+      }),
+    ].filter(Boolean),
   }
 
   if (IS_NODE) {
@@ -132,7 +133,7 @@ module.exports = (
     config.output = {
       path: path.resolve(paths.appServerBuild),
       publicPath,
-      filename: 'server.js'
+      filename: 'server.js',
     }
   }
 
@@ -147,8 +148,8 @@ module.exports = (
         // of CSS changes), or refresh the page (in case of JS changes). When you
         // make a syntax error, this client will display a syntax error overlay.
         require.resolve('kickstart-dev-utils/webpackHotDevClient'),
-        path.resolve(paths.appClientJs)
-      ]
+        path.resolve(paths.appClientJs),
+      ],
     }
 
     // Configure client-side bundles output. Note the public path is set to 3000
@@ -159,7 +160,7 @@ module.exports = (
       filename: '[name].js',
       chunkFilename: '[name].chunk.js',
       devtoolModuleFilenameTemplate: ({ resourcePath }) =>
-        path.resolve(resourcePath).replace(/\\/g, '/')
+        path.resolve(resourcePath).replace(/\\/g, '/'),
     }
   }
 
@@ -167,8 +168,8 @@ module.exports = (
     // Specify production entry point
     config.entry = {
       client: [
-        path.resolve(paths.appClientJs)
-      ]
+        path.resolve(paths.appClientJs),
+      ],
     }
 
     // Specify the client output directory and paths. Notice that we have
@@ -178,7 +179,7 @@ module.exports = (
       path: path.resolve(paths.appClientBuild),
       publicPath,
       filename: '[chunkhash:8].js',
-      chunkFilename: '[chunkhash:8].chunk.js'
+      chunkFilename: '[chunkhash:8].chunk.js',
     }
   }
 
