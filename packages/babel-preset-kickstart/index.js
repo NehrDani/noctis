@@ -79,7 +79,7 @@ const plugins = [
     require.resolve('babel-plugin-transform-react-remove-prop-types'),
     {
       removeImport: true,
-    }
+    },
   ],
 ].filter(Boolean)
 
@@ -103,9 +103,9 @@ const presets = [
       // Do not transform modules to CJS
       modules: false,
     },
-    // JSX, Flow
-    require.resolve('babel-preset-react'),
   ],
+  // JSX, Flow
+  require.resolve('babel-preset-react'),
 ].filter(Boolean)
 
 module.exports = {
