@@ -30,9 +30,9 @@ module.exports = (
     minify: IS_DEV,
     modules: true,
     importLoaders: 1,
-    localIdentName: IS_DEV
-      ? '[path]__[name]__[local]--[hash:base64:5]'
-      : '[hash:base64:7]',
+    localIdentName: IS_PROD
+      ? '[hash:base64:7]'
+      : '[path]__[name]__[local]--[hash:base64:5]',
   }
   const postCssOptions = {
     // Necessary for external CSS imports to work
@@ -75,6 +75,9 @@ module.exports = (
           test: /\.js$/,
           include: [paths.appSrc],
           use: [
+            // This loader parallelizes code compilation, it is optional but
+            // improves compile time on larger projects
+            require.resolve('thread-loader'),
             {
               loader: require.resolve('babel-loader'),
               options: babelOptions,
@@ -166,22 +169,19 @@ module.exports = (
     }
   }
 
-  if (IS_WEB && IS_PROD) {
+  if (IS_WEB && !IS_DEV) {
     // Specify production entry point
     config.entry = {
-      client: [
-        path.resolve(paths.appClientJs),
-      ],
+      client: [require.resolve('./polyfills'), path.resolve(paths.appClientJs)],
     }
 
-    // Specify the client output directory and paths. Notice that we have
-    // changed the publiPath to just '/' from http://localhost:8080. This is because
-    // we will only be using one port in production.
+    // Specify the client output directory and paths.
+    const filename = IS_PROD ? '[chunkhash:8]' : '[name].[chunkhash:4]'
     config.output = {
       path: path.resolve(paths.appClientBuild),
       publicPath,
-      filename: '[chunkhash:8].js',
-      chunkFilename: '[chunkhash:8].chunk.js',
+      filename: `${filename}.js`,
+      chunkFilename: `${filename}.chunk.js`,
     }
   }
 
