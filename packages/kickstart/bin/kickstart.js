@@ -10,7 +10,7 @@ process.on('unhandledRejection', err => {
 
 const spawn = require('react-dev-utils/crossSpawn')
 
-const isScript = x => ['start'].includes(x)
+const isScript = x => ['start', 'build'].includes(x)
 const [script, ...args] = process.argv.slice(2)
 
 if (isScript(script)) {
