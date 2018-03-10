@@ -142,6 +142,8 @@ module.exports = (
 
     config.entry = {
       client: [
+        // Ship a few polyfills by default.
+        require.resolve('./polyfills'),
         // Include an alternative client for WebpackDevServer. A client's job is to
         // connect to WebpackDevServer by a socket and get notified about changes.
         // When you save a file, the client will either apply hot updates (in case
