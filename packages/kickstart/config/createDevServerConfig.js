@@ -5,13 +5,17 @@ const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMi
 const ignoredFiles = require('react-dev-utils/ignoredFiles')
 const paths = require('./paths')
 
-module.exports = function ({ host = '0.0.0.0', port = 3001, protocol = 'http' }) {
+module.exports = function ({
+  host = '0.0.0.0',
+  port = 3001,
+  protocol = 'http',
+}) {
   return {
     // Enable gzip compression of generated files.
     compress: true,
     // Enable CORS
     headers: {
-      'Access-Control-Allow-Origin': '*'
+      'Access-Control-Allow-Origin': '*',
     },
     // Silence WebpackDevServer's own logs since they're generally not useful.
     // It will still show compile warnings and errors with this setting.
