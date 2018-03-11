@@ -72,12 +72,12 @@ const getClientEnvironment = () => {
       {
         // Useful for determining whether we’re running in production mode.
         // Most importantly, it switches React into the correct mode.
-        NODE_ENV: process.env.NODE_ENV || 'development',
-        PORT: process.env.PORT || 3000,
-        VERBOSE: !!process.env.VERBOSE,
-        HOST: process.env.HOST || '0.0.0.0',
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
+        PORT: JSON.stringify(process.env.PORT || 3000),
+        VERBOSE: !!JSON.stringify(process.env.VERBOSE),
+        HOST: JSON.stringify(process.env.HOST || '0.0.0.0'),
         // only for production builds. Useful if you need to serve from a CDN
-        PUBLIC_PATH: process.env.PUBLIC_PATH || '/',
+        PUBLIC_PATH: JSON.stringify(process.env.PUBLIC_PATH || '/'),
       }
     )
 
