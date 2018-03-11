@@ -1,6 +1,5 @@
 'use strict'
 
-const path = require('path')
 const webpack = require('webpack')
 const autoprefixer = require('autoprefixer')
 const nodeExternals = require('webpack-node-externals')
@@ -9,18 +8,16 @@ const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 const StartServerPlugin = require('start-server-webpack-plugin')
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin')
 const paths = require('./paths')
+const getClientEnv = require('./env')
 
 // Webpack config factory. The magic happens here!
-module.exports = (
-  target = 'web',
-  env = 'dev',
-  publicPath = '/',
-  onCompileSuccess = () => {}
-) => {
+module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
   const IS_NODE = target === 'node'
   const IS_WEB = target === 'web'
   const IS_PROD = env === 'prod'
   const IS_DEV = env === 'dev'
+
+  const clientEnv = getClientEnv()
 
   const babelOptions = {
     babelrc: false,
@@ -152,6 +149,7 @@ module.exports = (
           new ExtractTextPlugin({
           filename: '[name].[contenthash:8].css',
         }),
+        new webpack.DefinePlugin(clientEnv),
       ]),
       ...(IS_DEV && [
         // Add module names to factory functions so they appear in browser profiler.
@@ -176,11 +174,11 @@ module.exports = (
   if (IS_NODE) {
     config.externals = [nodeExternals()]
 
-    config.entry = [path.resolve(paths.appServerJs)]
+    config.entry = [paths.appServerJs]
 
     // Specify webpack Node.js output path and filename
     config.output = {
-      path: path.resolve(paths.appServerBuild),
+      path: paths.appServerBuild,
       filename: 'server.js',
       publicPath,
     }
@@ -191,6 +189,9 @@ module.exports = (
       __filename: true,
       __dirname: true,
     }
+
+    // Use watch in dev
+    config.watch = IS_DEV
   }
 
   if (IS_WEB) {
@@ -209,7 +210,7 @@ module.exports = (
         // make a syntax error, this client will display a syntax error overlay.
         require.resolve('kickstart-dev-utils/webpackHotDevClient'),
         // Finally, this is your app's code:
-        path.resolve(paths.appClientJs),
+        paths.appClientJs,
         // We include the app code last so that if there is a runtime error during
         // initialization, it doesn't blow up the WebpackDevServer client, and
         // changing JS code would still trigger a refresh.
@@ -219,7 +220,7 @@ module.exports = (
     config.output = {
       // Add /* filename */ comments to generated require()s in the output.
       pathinfo: IS_DEV,
-      path: path.resolve(paths.appClientBuild),
+      path: paths.appClientBuild,
       filename: `${filename}.js`,
       chunkFilename: `${filename}.chunk.js`,
       publicPath,
