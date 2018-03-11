@@ -26,7 +26,6 @@ const {
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages')
 const printBuildError = require('react-dev-utils/printBuildError')
 const logger = require('kickstart-dev-utils/logger')
-const createCompiler = require('kickstart-dev-utils/createCompiler')
 const createConfig = require('../config/createConfig')
 const paths = require('../config/paths')
 
@@ -43,41 +42,44 @@ const compile = (webpack, config) => {
     typeof process.env.CI !== 'string' ||
     process.env.CI.toLowerCase() !== 'false'
 
-  const compiler = createCompiler(webpack, config)
-
   return new Promise((resolve, reject) => {
-    compiler.run((err, stats) => {
-      if (err) {
-        return reject(err)
-      }
-      const { errors, warnings } = formatWebpackMessages(
-        stats.toJson({}, true)
-      )
-
-      // If errors exist, reject with exception.
-      if (errors.length) {
-        // Only keep the first error. Others are often indicative
-        // of the same problem, but confuse the reader with noise.
-        const [error] = errors
-        return reject(new Error(error))
-      }
-
-      // If CI is set handle warnigs as errors.
-      if (IS_CI && warnings.length) {
-        logger.warn(
-          'Treating warnings as errors because process.env.CI = true.\n' +
-            'Most CI servers set it automatically.'
+    try {
+      const compiler = webpack(config)
+      compiler.run((err, stats) => {
+        if (err) {
+          return reject(err)
+        }
+        const { errors, warnings } = formatWebpackMessages(
+          stats.toJson({}, true)
         )
 
-        return reject(new Error(warnings.join('\n\n')))
-      }
+        // If errors exist, reject with exception.
+        if (errors.length) {
+          // Only keep the first error. Others are often indicative
+          // of the same problem, but confuse the reader with noise.
+          const [error] = errors
+          return reject(new Error(error))
+        }
 
-      return resolve({
-        compiler,
-        stats,
-        warnings,
+        // If CI is set handle warnigs as errors.
+        if (IS_CI && warnings.length) {
+          logger.warn(
+            'Treating warnings as errors because process.env.CI = true.\n' +
+              'Most CI servers set it automatically.'
+          )
+
+          return reject(new Error(warnings.join('\n\n')))
+        }
+
+        return resolve({
+          compiler,
+          stats,
+          warnings,
+        })
       })
-    })
+    } catch (err) {
+      return reject(err)
+    }
   })
 }
 
@@ -139,6 +141,8 @@ const build = async () => {
       prevClientFiles,
       paths.appClientBuild
     )
+
+    process.exit()
   } catch (err) {
     if (isInteractive) {
       clearConsole()
