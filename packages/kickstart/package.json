@@ -1,6 +1,6 @@
 {
   "name": "kickstart",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Build cutting-egde, isomorphic React applications with ease",
   "repository": "git@github.com:NehrDani/kickstart.git",
   "author": "Daniel Nehring <nehrdani@gmail.com>",
