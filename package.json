@@ -1,8 +1,6 @@
 {
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": ["packages/*"],
   "scripts": {
     "precommit": "lint-staged"
   },
@@ -23,6 +21,7 @@
       "prettier --trailing-comma es5 --single-quote --write",
       "eslint --fix",
       "git add"
-    ]
+    ],
+    "yarn.lock": ["git rm --cached"]
   }
 }
