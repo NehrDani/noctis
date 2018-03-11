@@ -8,7 +8,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 const StartServerPlugin = require('start-server-webpack-plugin')
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin')
-const FriendlyErrorsPlugin = require('kickstart-dev-utils/FriendlyErrorsPlugin')
 const paths = require('./paths')
 
 // Webpack config factory. The magic happens here!
@@ -16,7 +15,7 @@ module.exports = (
   target = 'web',
   env = 'dev',
   publicPath = '/',
-  onCompileSuccess = () => {},
+  onCompileSuccess = () => {}
 ) => {
   const IS_NODE = target === 'node'
   const IS_WEB = target === 'web'
@@ -35,9 +34,7 @@ module.exports = (
     minify: IS_DEV,
     modules: true,
     importLoaders: 1,
-    localIdentName: IS_PROD
-      ? '[hash:base64:7]'
-      : '[path]__[name]__[local]',
+    localIdentName: IS_PROD ? '[hash:base64:7]' : '[path]__[name]__[local]',
   }
   const postCssOptions = {
     // Necessary for external CSS imports to work
@@ -45,10 +42,7 @@ module.exports = (
     ident: 'postcss',
     plugins: () => [
       autoprefixer({
-        browsers: [
-          'last 2 versions',
-          'not ie < 11',
-        ],
+        browsers: ['last 2 versions', 'not ie < 11'],
         flexbox: 'no-2009',
       }),
     ],
@@ -140,15 +134,20 @@ module.exports = (
     },
     plugins: [
       // Prevent creating multiple chunks for the server.
-      IS_NODE && new webpack.optimize.LimitChunkCountPlugin({
+      IS_NODE &&
+        new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 1,
       }),
       // Automatically start the server when done compiling.
-      IS_NODE && IS_DEV && new StartServerPlugin({
+      IS_NODE &&
+        IS_DEV &&
+        new StartServerPlugin({
         name: 'server.js',
       }),
       // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
-      IS_WEB && !IS_DEV && new ExtractTextPlugin({
+      IS_WEB &&
+        !IS_DEV &&
+        new ExtractTextPlugin({
         filename: '[name].[contenthash:8].css',
       }),
       // Add module names to factory functions so they appear in browser profiler.
@@ -166,12 +165,6 @@ module.exports = (
       IS_DEV && new WatchMissingNodeModulesPlugin(paths.appNodeModules),
       // Supress errors to console (we use our own logger)
       IS_DEV && new webpack.NoEmitOnErrorsPlugin(),
-      // Use our own FriendlyErrorsPlugin during development.
-      IS_DEV && new FriendlyErrorsPlugin({
-        verbose: process.env.VERBOSE,
-        target,
-        onSuccess: onCompileSuccess,
-      }),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell Webpack to provide empty mocks for them so importing them works.
