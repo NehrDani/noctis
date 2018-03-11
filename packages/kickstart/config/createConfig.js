@@ -132,42 +132,41 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
       ],
     },
     plugins: [
-      ...(IS_NODE && [
-        // Prevent creating multiple chunks for the server.
+      // Prevent creating multiple chunks for the server.
+      IS_NODE &&
         new webpack.optimize.LimitChunkCountPlugin({
-          maxChunks: 1,
-        }),
-        // Automatically start the server when done compiling.
+        maxChunks: 1,
+      }),
+      // Automatically start the server when done compiling.
+      IS_NODE &&
         IS_DEV &&
-          new StartServerPlugin({
-          name: 'server.js',
-        }),
-      ]),
-      ...(IS_WEB && [
-        // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
+        new StartServerPlugin({
+        name: 'server.js',
+      }),
+      // Makes some environment variables available to the JS code, for example:
+      // if (process.env.NODE_ENV === 'development') { ... }. See `./env.js`.
+      IS_WEB && new webpack.DefinePlugin(clientEnv),
+      // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
+      IS_WEB &&
         !IS_DEV &&
-          new ExtractTextPlugin({
-          filename: '[name].[contenthash:8].css',
-        }),
-        new webpack.DefinePlugin(clientEnv),
-      ]),
-      ...(IS_DEV && [
-        // Add module names to factory functions so they appear in browser profiler.
-        new webpack.NamedModulesPlugin(),
-        // Add hot module replacement
-        new webpack.HotModuleReplacementPlugin(),
-        // Watcher doesn't work well if you mistype casing in a path so we use
-        // a plugin that prints an error when you attempt to do this.
-        // See https://github.com/facebook/create-react-app/issues/240
-        new CaseSensitivePathsPlugin(),
-        // If you require a missing module and then `npm install` it, you still
-        // have to restart the development server for Webpack to discover it.
-        // This plugin makes the discovery automatic so you don't have to restart.
-        // See https://github.com/facebookincubator/create-react-app/issues/186
-        new WatchMissingNodeModulesPlugin(paths.appNodeModules),
-        // Supress errors to console (we use our own logger)
-        new webpack.NoEmitOnErrorsPlugin(),
-      ]),
+        new ExtractTextPlugin({
+        filename: '[name].[contenthash:8].css',
+      }),
+      // Add module names to factory functions so they appear in browser profiler.
+      IS_DEV && new webpack.NamedModulesPlugin(),
+      // Add hot module replacement
+      IS_DEV && new webpack.HotModuleReplacementPlugin(),
+      // Watcher doesn't work well if you mistype casing in a path so we use
+      // a plugin that prints an error when you attempt to do this.
+      // See https://github.com/facebook/create-react-app/issues/240
+      IS_DEV && new CaseSensitivePathsPlugin(),
+      // If you require a missing module and then `npm install` it, you still
+      // have to restart the development server for Webpack to discover it.
+      // This plugin makes the discovery automatic so you don't have to restart.
+      // See https://github.com/facebookincubator/create-react-app/issues/186
+      IS_DEV && new WatchMissingNodeModulesPlugin(paths.appNodeModules),
+      // Supress errors to console (we use our own logger)
+      IS_DEV && new webpack.NoEmitOnErrorsPlugin(),
     ].filter(Boolean),
   }
 
