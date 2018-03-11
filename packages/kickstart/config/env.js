@@ -56,17 +56,18 @@ process.env.NODE_PATH = (process.env.NODE_PATH || '')
   .map(folder => path.resolve(appDirectory, folder))
   .join(path.delimiter)
 
-// Grab NODE_ENV and KICKSTART_* environment variables and prepare them to be
+// Grab KICKSTART_* environment variables and prepare them to be
 // injected into the application via DefinePlugin in Webpack configuration.
 const KICKSTART = /^KICKSTART_/i
 
-const getClientEnvironment = publicUrl => {
-  const raw = Object.keys(process.env)
+const getClientEnvironment = () => {
+  // Stringify all values so we can feed into Webpack DefinePlugin
+  const stringified = Object.keys(process.env)
     .filter(key => KICKSTART.test(key))
     .reduce(
       (env, key) => ({
         ...env,
-        [key]: process.env[key]
+        [key]: JSON.stringify(process.env[key]),
       }),
       {
         // Useful for determining whether we’re running in production mode.
@@ -75,22 +76,14 @@ const getClientEnvironment = publicUrl => {
         PORT: process.env.PORT || 3000,
         VERBOSE: !!process.env.VERBOSE,
         HOST: process.env.HOST || '0.0.0.0',
-        // Useful for resolving the correct path to static assets in `public`.
-        // For example, <img src={process.env.PUBLIC_URL + '/img/logo.png'} />.
-        // This should only be used as an escape hatch. Normally you would put
-        // images into the `src` and `import` them in code to get their paths.
-        PUBLIC_URL: publicUrl,
+        // only for production builds. Useful if you need to serve from a CDN
+        PUBLIC_PATH: process.env.PUBLIC_PATH || '/',
       }
     )
-  // Stringify all values so we can feed into Webpack DefinePlugin
-  const stringified = {
-    'process.env': Object.keys(raw).reduce((env, key) => ({
-      ...env,
-      [key]: JSON.stringify(raw[key])
-    }), {}),
-  }
 
-  return { raw, stringified }
+  return {
+    'process.env': stringified,
+  }
 }
 
 module.exports = getClientEnvironment
