@@ -6,6 +6,8 @@ const nodeExternals = require('webpack-node-externals')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 const StartServerPlugin = require('start-server-webpack-plugin')
+const ManifestPlugin = require('webpack-manifest-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin')
 const paths = require('./paths')
 const getClientEnv = require('./env')
@@ -62,7 +64,8 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
   let config = {
     context: process.cwd(),
     target,
-    devtool: 'cheap-module-source-map',
+    devtool: IS_DEV ? 'cheap-module-source-map' : 'source-map',
+    bail: !IS_DEV,
     module: {
       strictExportPresence: true,
       rules: [
@@ -146,11 +149,51 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
       // Makes some environment variables available to the JS code, for example:
       // if (process.env.NODE_ENV === 'development') { ... }. See `./env.js`.
       IS_WEB && new webpack.DefinePlugin(clientEnv),
+      // Minify the code.
+      IS_WEB &&
+        !IS_DEV &&
+        new UglifyJsPlugin({
+        uglifyOptions: {
+          ecma: 8,
+          compress: {
+            warnings: false,
+            // Disabled because of an issue with Uglify breaking seemingly valid code:
+            // https://github.com/facebook/create-react-app/issues/2376
+            // Pending further investigation:
+            // https://github.com/mishoo/UglifyJS2/issues/2011
+            comparisons: false,
+          },
+          mangle: {
+            safari10: true,
+          },
+          output: {
+            comments: false,
+            // Turned on because emoji and regex is not minified properly using default
+            // https://github.com/facebook/create-react-app/issues/2488
+            ascii_only: true,
+          },
+        },
+        // Use multi-process parallel running to improve the build speed
+        // Default number of concurrent runs: os.cpus().length - 1
+        parallel: true,
+        // Enable file caching
+        cache: true,
+        sourceMap: !IS_PROD,
+      }),
       // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
       IS_WEB &&
         !IS_DEV &&
         new ExtractTextPlugin({
         filename: '[name].[contenthash:8].css',
+      }),
+      // Generate a manifest file which contains a mapping of all asset filenames
+      // to their corresponding output file so that tools can pick it up without
+      // having to parse `index.html`.
+      IS_WEB &&
+        !IS_DEV &&
+        new ManifestPlugin({
+        fileName: 'asset-manifest.json',
+        publicPath,
       }),
       // Add module names to factory functions so they appear in browser profiler.
       IS_DEV && new webpack.NamedModulesPlugin(),
@@ -188,9 +231,6 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
       __filename: true,
       __dirname: true,
     }
-
-    // Use watch in dev
-    config.watch = IS_DEV
   }
 
   if (IS_WEB) {

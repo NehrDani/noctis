@@ -45,9 +45,11 @@
     "start-server-webpack-plugin": "^2.2.5",
     "style-loader": "^0.20.2",
     "thread-loader": "^1.1.5",
+    "uglifyjs-webpack-plugin": "^1.2.3",
     "url-loader": "^1.0.1",
     "webpack": "^3.11.0",
     "webpack-dev-server": "^2.11.1",
+    "webpack-manifest-plugin": "^2.0.0-rc.2",
     "webpack-node-externals": "^1.6.0",
     "whatwg-fetch": "^2.0.3"
   }
