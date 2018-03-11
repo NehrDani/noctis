@@ -16,6 +16,7 @@ require('../config/env')
 
 const webpack = require('webpack')
 const fs = require('fs-extra')
+const chalk = require('chalk')
 const clearConsole = require('react-dev-utils/clearConsole')
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles')
 const {
@@ -49,9 +50,6 @@ const compile = (webpack, config) => {
       if (err) {
         return reject(err)
       }
-      // We have switched off the default Webpack output in WebpackDevServer
-      // options so we are going to "massage" the warnings and errors
-      // and present them in a readable focused way
       const { errors, warnings } = formatWebpackMessages(
         stats.toJson({}, true)
       )
@@ -66,7 +64,7 @@ const compile = (webpack, config) => {
 
       // If CI is set handle warnigs as errors.
       if (IS_CI && warnings.length) {
-        logger.error(
+        logger.warn(
           'Treating warnings as errors because process.env.CI = true.\n' +
             'Most CI servers set it automatically.'
         )
@@ -88,10 +86,12 @@ const build = async () => {
     clearConsole()
   }
 
-  logger.log('Creating an optimized production build...\n\n')
+  logger.log('Creating an optimized production build...\n')
 
-  // Only compare client files, because they are critical for UX
-  const prevFileSizes = await measureFileSizesBeforeBuild(paths.appClientBuild)
+  const [prevServerFiles, prevClientFiles] = await Promise.all([
+    measureFileSizesBeforeBuild(paths.appServerBuild),
+    measureFileSizesBeforeBuild(paths.appClientBuild),
+  ])
 
   // Remove all content but keep the directory so that
   // if you're in it, you don't end up in Trash
@@ -99,6 +99,9 @@ const build = async () => {
 
   // Paralellize compilings
   try {
+    // Initially show output so the user has immediate feedback
+    logger.start('Compiling...')
+
     const serverConfig = createConfig('node', 'prod', '/')
     const clientConfig = createConfig('web', 'prod', '/')
 
@@ -109,6 +112,10 @@ const build = async () => {
 
     const warnings = [...server.warnings, ...client.warnings]
 
+    if (isInteractive) {
+      clearConsole()
+    }
+
     // Show warnings.
     if (warnings.length) {
       logger.warn('Compiled with warnings.')
@@ -118,10 +125,24 @@ const build = async () => {
 
     logger.done('Compiled successfully.')
 
-    // Print the diffrent file sizes of the client before and after.
-    console.log('File sizes after gzip:\n')
-    printFileSizesAfterBuild(client.stats, prevFileSizes, paths.appClientBuild)
+    // Print the diffrent file sizes of the client and server after build.
+    logger.log('File sizes after gzip:\n')
+    logger.log(chalk.bold('Server:'))
+    printFileSizesAfterBuild(
+      server.stats,
+      prevServerFiles,
+      paths.appServerBuild
+    )
+    logger.log(chalk.bold('Client:'))
+    printFileSizesAfterBuild(
+      client.stats,
+      prevClientFiles,
+      paths.appClientBuild
+    )
   } catch (err) {
+    if (isInteractive) {
+      clearConsole()
+    }
     logger.error(`Failed to compile server!`)
     printBuildError(err)
     process.exit(1)
