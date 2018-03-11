@@ -34,7 +34,9 @@ module.exports = (
     minify: IS_DEV,
     modules: true,
     importLoaders: 1,
-    localIdentName: IS_PROD ? '[hash:base64:7]' : '[path]__[name]__[local]',
+    localIdentName: IS_PROD
+      ? '[hash:base64:7]'
+      : `[path]__[name]__[local]${IS_DEV ? '' : '--[hash:base64:5]'}`,
   }
   const postCssOptions = {
     // Necessary for external CSS imports to work
@@ -133,54 +135,45 @@ module.exports = (
       ],
     },
     plugins: [
-      // Prevent creating multiple chunks for the server.
-      IS_NODE &&
+      ...(IS_NODE && [
+        // Prevent creating multiple chunks for the server.
         new webpack.optimize.LimitChunkCountPlugin({
-        maxChunks: 1,
-      }),
-      // Automatically start the server when done compiling.
-      IS_NODE &&
+          maxChunks: 1,
+        }),
+        // Automatically start the server when done compiling.
         IS_DEV &&
-        new StartServerPlugin({
-        name: 'server.js',
-      }),
-      // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
-      IS_WEB &&
+          new StartServerPlugin({
+          name: 'server.js',
+        }),
+      ]),
+      ...(IS_WEB && [
+        // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
         !IS_DEV &&
-        new ExtractTextPlugin({
-        filename: '[name].[contenthash:8].css',
-      }),
-      // Add module names to factory functions so they appear in browser profiler.
-      IS_DEV && new webpack.NamedModulesPlugin(),
-      // Add hot module replacement
-      IS_DEV && new webpack.HotModuleReplacementPlugin(),
-      // Watcher doesn't work well if you mistype casing in a path so we use
-      // a plugin that prints an error when you attempt to do this.
-      // See https://github.com/facebook/create-react-app/issues/240
-      IS_DEV && new CaseSensitivePathsPlugin(),
-      // If you require a missing module and then `npm install` it, you still have
-      // to restart the development server for Webpack to discover it. This plugin
-      // makes the discovery automatic so you don't have to restart.
-      // See https://github.com/facebookincubator/create-react-app/issues/186
-      IS_DEV && new WatchMissingNodeModulesPlugin(paths.appNodeModules),
-      // Supress errors to console (we use our own logger)
-      IS_DEV && new webpack.NoEmitOnErrorsPlugin(),
+          new ExtractTextPlugin({
+          filename: '[name].[contenthash:8].css',
+        }),
+      ]),
+      ...(IS_DEV && [
+        // Add module names to factory functions so they appear in browser profiler.
+        new webpack.NamedModulesPlugin(),
+        // Add hot module replacement
+        new webpack.HotModuleReplacementPlugin(),
+        // Watcher doesn't work well if you mistype casing in a path so we use
+        // a plugin that prints an error when you attempt to do this.
+        // See https://github.com/facebook/create-react-app/issues/240
+        new CaseSensitivePathsPlugin(),
+        // If you require a missing module and then `npm install` it, you still
+        // have to restart the development server for Webpack to discover it.
+        // This plugin makes the discovery automatic so you don't have to restart.
+        // See https://github.com/facebookincubator/create-react-app/issues/186
+        new WatchMissingNodeModulesPlugin(paths.appNodeModules),
+        // Supress errors to console (we use our own logger)
+        new webpack.NoEmitOnErrorsPlugin(),
+      ]),
     ].filter(Boolean),
-    // Some libraries import Node modules but don't use them in the browser.
-    // Tell Webpack to provide empty mocks for them so importing them works.
-    node: {
-      dgram: 'empty',
-      fs: 'empty',
-      net: 'empty',
-      tls: 'empty',
-      child_process: 'empty',
-    },
   }
 
   if (IS_NODE) {
-    // Don't forget node's __filename, and __dirname
-    config.node = { console: true, __filename: true, __dirname: true }
-
     config.externals = [nodeExternals()]
 
     config.entry = [path.resolve(paths.appServerJs)]
@@ -188,13 +181,22 @@ module.exports = (
     // Specify webpack Node.js output path and filename
     config.output = {
       path: path.resolve(paths.appServerBuild),
-      publicPath,
       filename: 'server.js',
+      publicPath,
+    }
+
+    // Don't forget node's __filename, and __dirname
+    config.node = {
+      console: true,
+      __filename: true,
+      __dirname: true,
     }
   }
 
-  if (IS_WEB && IS_DEV) {
-    // Specify client entry point /src/client.js
+  if (IS_WEB) {
+    const filename = IS_PROD
+      ? '[chunkhash:8]'
+      : `[name]${IS_DEV ? '' : '.[chunkhash:4]'}`
 
     config.entry = {
       client: [
@@ -211,32 +213,26 @@ module.exports = (
         // We include the app code last so that if there is a runtime error during
         // initialization, it doesn't blow up the WebpackDevServer client, and
         // changing JS code would still trigger a refresh.
-      ],
+      ].filter(Boolean),
     }
 
-    // Configure client-side bundles output. Note the public path is set to 3000
     config.output = {
       // Add /* filename */ comments to generated require()s in the output.
-      pathinfo: true,
-      filename: '[name].js',
-      chunkFilename: '[name].chunk.js',
-      publicPath,
-    }
-  }
-
-  if (IS_WEB && !IS_DEV) {
-    // Specify production entry point
-    config.entry = {
-      client: [require.resolve('./polyfills'), path.resolve(paths.appClientJs)],
-    }
-
-    // Specify the client output directory and paths.
-    const filename = IS_PROD ? '[chunkhash:8]' : '[name].[chunkhash:4]'
-    config.output = {
+      pathinfo: IS_DEV,
       path: path.resolve(paths.appClientBuild),
-      publicPath,
       filename: `${filename}.js`,
       chunkFilename: `${filename}.chunk.js`,
+      publicPath,
+    }
+
+    // Some libraries import Node modules but don't use them in the browser.
+    // Tell Webpack to provide empty mocks for them so importing them works.
+    config.node = {
+      dgram: 'empty',
+      fs: 'empty',
+      net: 'empty',
+      tls: 'empty',
+      child_process: 'empty',
     }
   }
 
