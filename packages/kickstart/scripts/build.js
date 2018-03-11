@@ -17,7 +17,10 @@ const webpack = require('webpack')
 const fs = require('fs-extra')
 const clearConsole = require('react-dev-utils/clearConsole')
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles')
-const FileSizeReporter = require('react-dev-utils/FileSizeReporter')
+const {
+  measureFileSizesBeforeBuild,
+  printFileSizesAfterBuild,
+} = require('react-dev-utils/FileSizeReporter')
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages')
 const printBuildError = require('react-dev-utils/printBuildError')
 const logger = require('kickstart-dev-utils/logger')
@@ -27,12 +30,9 @@ const paths = require('../config/paths')
 
 const isInteractive = process.stdout.isTTY
 
-const measureFileSizesBeforeBuild =
-  FileSizeReporter.measureFileSizesBeforeBuild
-const printFileSizesAfterBuild = FileSizeReporter.printFileSizesAfterBuild
-
 // Check for CI
-const IS_CI = typeof process.env.CI !== 'string' ||
+const IS_CI =
+  typeof process.env.CI !== 'string' ||
   process.env.CI.toLowerCase() !== 'false'
 
 // Warn and crash if required files are missing
@@ -50,7 +50,9 @@ const compile = (config, target = 'client') => {
       if (err) {
         return reject(err)
       }
-      const { errors, warnings } = formatWebpackMessages(stats.toJson({}, true))
+      const { errors, warnings } = formatWebpackMessages(
+        stats.toJson({}, true)
+      )
       if (errors.length) {
         // Only keep the first error. Others are often indicative
         // of the same problem, but confuse the reader with noise.
@@ -61,7 +63,7 @@ const compile = (config, target = 'client') => {
       if (IS_CI && warnings.length) {
         logger.warn(
           'Treating warnings as errors because process.env.CI = true.\n' +
-          'Most CI servers set it automatically.\n'
+            'Most CI servers set it automatically.\n'
         )
 
         return reject(new Error(warnings.join('\n\n')))
@@ -80,9 +82,9 @@ const build = async () => {
     clearConsole()
   }
 
-  logger.info('Creating an optimized production build...\n\n')
+  logger.log('Creating an optimized production build...\n\n')
 
-  // Only compare clint files, because they are critical for UX
+  // Only compare client files, because they are critical for UX
   const prevFileSizes = await measureFileSizesBeforeBuild(paths.appClientBuild)
 
   // Remove all content but keep the directory so that
@@ -106,6 +108,7 @@ const build = async () => {
     process.exit(1)
   }
 
+  // create some space between the compilers
   console.log()
 
   // Compiling client
