@@ -30,7 +30,7 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
     presets: [require.resolve('babel-preset-kickstart')],
   }
   const cssOptions = {
-    minify: IS_DEV,
+    minify: IS_PROD,
     modules: true,
     importLoaders: 1,
     localIdentName: IS_PROD
@@ -101,36 +101,36 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
                 })
                 : cssLoaders,
             },
-          ],
-        },
-        // Transform ES6 with Babel
-        {
-          test: /\.js$/,
-          include: [paths.appSrc],
-          use: [
-            // This loader parallelizes code compilation, it is optional but
-            // improves compile time on larger projects
-            require.resolve('thread-loader'),
+            // Transform ES6 with Babel
             {
-              loader: require.resolve('babel-loader'),
-              options: babelOptions,
+              test: /\.js$/,
+              include: [paths.appSrc],
+              use: [
+                // This loader parallelizes code compilation, it is optional but
+                // improves compile time on larger projects
+                require.resolve('thread-loader'),
+                {
+                  loader: require.resolve('babel-loader'),
+                  options: babelOptions,
+                },
+              ],
+            },
+            // "file" loader makes sure assets end up in the `build` folder.
+            // When you `import` an asset, you get its filename.
+            // This loader doesn't use a "test" so it will catch all modules
+            // that fall through the other loaders.
+            {
+              loader: require.resolve('file-loader'),
+              // Exclude `js` files to keep "css" loader working as it injects
+              // it's runtime that would otherwise be processed through "file" loader.
+              // Also exclude `html` and `json` extensions so they get processed
+              // by webpacks internal loaders.
+              exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/],
+              options: {
+                name: '[name].[hash:8].[ext]',
+              },
             },
           ],
-        },
-        // "file" loader makes sure assets end up in the `build` folder.
-        // When you `import` an asset, you get its filename.
-        // This loader doesn't use a "test" so it will catch all modules
-        // that fall through the other loaders.
-        {
-          loader: require.resolve('file-loader'),
-          // Exclude `js` files to keep "css" loader working as it injects
-          // it's runtime that would otherwise be processed through "file" loader.
-          // Also exclude `html` and `json` extensions so they get processed
-          // by webpacks internal loaders.
-          exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/],
-          options: {
-            name: '[name].[hash:8].[ext]',
-          },
         },
       ],
     },
