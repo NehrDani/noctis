@@ -2,6 +2,7 @@
 
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.NODE_ENV = 'production'
+process.env.BABEL_ENV = 'production'
 
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
@@ -30,18 +31,16 @@ const paths = require('../config/paths')
 
 const isInteractive = process.stdout.isTTY
 
-// Check for CI
-const IS_CI =
-  typeof process.env.CI !== 'string' ||
-  process.env.CI.toLowerCase() !== 'false'
-
 // Warn and crash if required files are missing
 if (!checkRequiredFiles([paths.appServerJs, paths.appClientJs])) {
   process.exit(1)
 }
 
-const compile = (config, target = 'client') => {
-  logger.start(`Compiling ${target}...`)
+const compile = (webpack, config) => {
+  // Check for CI
+  const IS_CI =
+    typeof process.env.CI !== 'string' ||
+    process.env.CI.toLowerCase() !== 'false'
 
   const compiler = createCompiler(webpack, config)
 
@@ -50,9 +49,14 @@ const compile = (config, target = 'client') => {
       if (err) {
         return reject(err)
       }
+      // We have switched off the default Webpack output in WebpackDevServer
+      // options so we are going to "massage" the warnings and errors
+      // and present them in a readable focused way
       const { errors, warnings } = formatWebpackMessages(
         stats.toJson({}, true)
       )
+
+      // If errors exist, reject with exception.
       if (errors.length) {
         // Only keep the first error. Others are often indicative
         // of the same problem, but confuse the reader with noise.
@@ -60,16 +64,18 @@ const compile = (config, target = 'client') => {
         return reject(new Error(error))
       }
 
+      // If CI is set handle warnigs as errors.
       if (IS_CI && warnings.length) {
-        logger.warn(
+        logger.error(
           'Treating warnings as errors because process.env.CI = true.\n' +
-            'Most CI servers set it automatically.\n'
+            'Most CI servers set it automatically.'
         )
 
         return reject(new Error(warnings.join('\n\n')))
       }
 
       return resolve({
+        compiler,
         stats,
         warnings,
       })
@@ -91,43 +97,32 @@ const build = async () => {
   // if you're in it, you don't end up in Trash
   fs.emptyDirSync(paths.appBuild)
 
-  // Compiling server
+  // Paralellize compilings
   try {
     const serverConfig = createConfig('node', 'prod', '/')
-    const { warnings } = await compile(serverConfig, 'server')
-
-    if (warnings.length) {
-      logger.warn('Compiled with warnings.')
-      logger.log(warnings.join('\n\n'))
-    } else {
-      logger.done('Compiled server successfully.')
-    }
-  } catch (err) {
-    logger.error(`Failed to compile server!`)
-    printBuildError(err)
-    process.exit(1)
-  }
-
-  // create some space between the compilers
-  console.log()
-
-  // Compiling client
-  try {
     const clientConfig = createConfig('web', 'prod', '/')
-    const { stats, warnings } = await compile(clientConfig, 'client')
 
+    const [server, client] = await Promise.all([
+      compile(webpack, serverConfig),
+      compile(webpack, clientConfig),
+    ])
+
+    const warnings = [...server.warnings, ...client.warnings]
+
+    // Show warnings.
     if (warnings.length) {
       logger.warn('Compiled with warnings.')
       logger.log(warnings.join('\n\n'))
-    } else {
-      logger.done('Compiled client successfully.')
+      return
     }
+
+    logger.done('Compiled successfully.')
 
     // Print the diffrent file sizes of the client before and after.
     console.log('File sizes after gzip:\n')
-    printFileSizesAfterBuild(stats, prevFileSizes, paths.appClientBuild)
+    printFileSizesAfterBuild(client.stats, prevFileSizes, paths.appClientBuild)
   } catch (err) {
-    logger.error(`Failed to compile client!`)
+    logger.error(`Failed to compile server!`)
     printBuildError(err)
     process.exit(1)
   }
