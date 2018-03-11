@@ -24,7 +24,6 @@ const logger = require('kickstart-dev-utils/logger')
 const createCompiler = require('kickstart-dev-utils/createCompiler')
 const createCompileState = require('kickstart-dev-utils/createCompileState')
 const getServerSettings = require('kickstart-dev-utils/getServerSettings')
-const printInstructions = require('kickstart-dev-utils/printInstructions')
 const createConfig = require('../config/createConfig')
 const createDevServerConfig = require('../config/createDevServerConfig')
 const paths = require('../config/paths')
@@ -48,10 +47,6 @@ const start = async () => {
   const publicPath = `${protocol}://${host}:${portDev}/`
   const urls = prepareUrls(protocol, host, port)
 
-  if (isInteractive) {
-    clearConsole()
-  }
-
   // Remove all content but keep the directory so that
   // if you're in it, you don't end up in trash
   fs.emptyDirSync(paths.appBuild)
@@ -60,13 +55,19 @@ const start = async () => {
   const serverConfig = createConfig('node', 'dev', publicPath)
   const clientConfig = createConfig('web', 'dev', publicPath)
 
+  if (isInteractive) {
+    clearConsole()
+  }
+
   // Initially show output so the user has immediate feedback
   logger.start('Compiling...')
 
-  const serverCompiler = createCompiler(webpack, serverConfig, {
+  const serverCompiler = createCompiler({
+    webpack,
+    config: serverConfig,
     compileState,
-    isInteractive,
-    onSuccess: () => printInstructions(appName, urls),
+    appName,
+    urls,
   })
 
   // Start our server webpack instance in watch mode.
@@ -78,10 +79,12 @@ const start = async () => {
   )
 
   // Compile our assets with webpack
-  const clientCompiler = createCompiler(webpack, clientConfig, {
+  const clientCompiler = createCompiler({
+    webpack,
+    config: clientConfig,
     compileState,
-    isInteractive,
-    onSuccess: () => printInstructions(appName, urls),
+    appName,
+    urls,
   })
 
   // Create a new instance of WebpackDevServer for our client assets.
@@ -95,6 +98,7 @@ const start = async () => {
   clientDevServer.listen(portDev, err => {
     if (err) {
       logger.error(err)
+      process.exit(1)
     }
   })
 }

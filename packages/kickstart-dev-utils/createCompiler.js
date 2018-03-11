@@ -2,15 +2,14 @@
 
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages')
 const clearConsole = require('react-dev-utils/clearConsole')
+const printInstructions = require('kickstart-dev-utils/printInstructions')
 const logger = require('./logger')
+
+const isInteractive = process.stdout.isTTY
 
 // "Compiler" is a low-level interface to Webpack.
 // It lets us listen to some events and provide our own custom messages.
-const createCompiler = (
-  webpack,
-  config,
-  { compileState, onSuccess = () => {}, isInteractive }
-) => {
+const createCompiler = ({ webpack, config, compileState, appName, urls }) => {
   try {
     const compiler = webpack(config)
 
@@ -72,9 +71,7 @@ const createCompiler = (
         logger.done('Compiled sucessfully!')
         compileState.isDone(true)
 
-        // We can use "onSuccess" callback to allow additional handling outside
-        // of this creator. Like showing the server url.
-        onSuccess()
+        printInstructions(appName, urls)
       })
     }
 
