@@ -3,9 +3,7 @@
 const chalk = require('chalk')
 
 const printInstructions = urls => {
-  console.log()
-  console.log(`You can now view ${chalk.bold('your app')} in the browser.`)
-  console.log()
+  console.log(`You can now view ${chalk.bold('your app')} in the browser.\n`)
 
   console.log(
     `  ${chalk.bold('Local:')}            ${urls.localUrlForTerminal}`
@@ -17,9 +15,7 @@ const printInstructions = urls => {
     )
   }
 
-  console.log()
-  console.log('Note that the development build is not optimized.')
-  console.log()
+  console.log('\nNote that the development build is not optimized.\n')
 }
 
 module.exports = printInstructions
