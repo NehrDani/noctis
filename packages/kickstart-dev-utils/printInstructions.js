@@ -1,9 +1,10 @@
 'use strict'
 
 const chalk = require('chalk')
+const logger = require('./logger')
 
-const printInstructions = urls => {
-  console.log(`You can now view ${chalk.bold('your app')} in the browser.\n`)
+const printInstructions = (appName, urls) => {
+  console.log(`You can now view ${chalk.bold(appName)} in the browser.\n`)
 
   console.log(
     `  ${chalk.bold('Local:')}            ${urls.localUrlForTerminal}`
@@ -15,7 +16,8 @@ const printInstructions = urls => {
     )
   }
 
-  console.log('\nNote that the development build is not optimized.\n')
+  console.log()
+  logger.info('Note that the development build is not optimized.\n')
 }
 
 module.exports = printInstructions

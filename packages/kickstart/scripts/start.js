@@ -41,7 +41,8 @@ const start = async () => {
 
   // Get server settings
   const { protocol, host, port, portDev } = await getServerSettings()
-
+  // Read some info of the project
+  const { name: appName } = require(paths.appPackageJson)
   // Set publicPath for development server.
   // On this path we serve the compiled assets.
   const publicPath = `${protocol}://${host}:${portDev}/`
@@ -65,7 +66,7 @@ const start = async () => {
   const serverCompiler = createCompiler(webpack, serverConfig, {
     compileState,
     isInteractive,
-    onSuccess: () => printInstructions(urls),
+    onSuccess: () => printInstructions(appName, urls),
   })
 
   // Start our server webpack instance in watch mode.
@@ -80,7 +81,7 @@ const start = async () => {
   const clientCompiler = createCompiler(webpack, clientConfig, {
     compileState,
     isInteractive,
-    onSuccess: () => printInstructions(urls),
+    onSuccess: () => printInstructions(appName, urls),
   })
 
   // Create a new instance of WebpackDevServer for our client assets.
