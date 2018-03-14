@@ -14,6 +14,7 @@ process.on('unhandledRejection', err => {
 // Ensure environment variables are read.
 require('../config/env')
 
+const EventEmitter = require('events')
 const webpack = require('webpack')
 const WebpackDevServer = require('webpack-dev-server')
 const fs = require('fs-extra')
@@ -22,8 +23,16 @@ const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles')
 const { prepareUrls } = require('react-dev-utils/WebpackDevServerUtils')
 const logger = require('kickstart-dev-utils/logger')
 const createCompiler = require('kickstart-dev-utils/createCompiler')
-const createCompileState = require('kickstart-dev-utils/createCompileState')
 const getServerSettings = require('kickstart-dev-utils/getServerSettings')
+const printInstructions = require('kickstart-dev-utils/printInstructions')
+const {
+  isDone,
+  isInvalid,
+  setDone,
+  unsetDone,
+  setInvalid,
+  unsetInvalid,
+} = require('kickstart-dev-utils/compilerStates')
 const createConfig = require('../config/createConfig')
 const createDevServerConfig = require('../config/createDevServerConfig')
 const paths = require('../config/paths')
@@ -36,7 +45,13 @@ if (!checkRequiredFiles([paths.appServerJs, paths.appClientJs])) {
 }
 
 const start = async () => {
-  const compileState = createCompileState()
+  if (isInteractive) {
+    clearConsole()
+  }
+
+  logger.info('Starting the development build.\n')
+  logger.start('Compiling server...')
+  logger.start('Compiling client...')
 
   // Get server settings
   const { protocol, host, port, portDev } = await getServerSettings()
@@ -47,6 +62,65 @@ const start = async () => {
   const publicPath = `${protocol}://${host}:${portDev}/`
   const urls = prepareUrls(protocol, host, port)
 
+  // We use the same eventEmitter on both builds. In addition with
+  // controlled compilerStates we are able to check the state of
+  // both compilers when one of them fires an event. This allows us to
+  // wait for both compilations to finish before sending the instructions.
+  const emitter = new EventEmitter()
+
+  emitter.on('invalid', ({ target }) => {
+    unsetDone(target)
+
+    // Clear console if one build gets invalid.
+    if (!isInvalid('server') && !isInvalid('client') && isInteractive) {
+      clearConsole()
+    }
+
+    if (target === 'server') {
+      // TODO stop server
+    }
+
+    logger.start(`Compiling ${target}...`)
+    setInvalid(target)
+  })
+
+  emitter.on('done', async ({ target, warnings, errors }) => {
+    unsetInvalid(target)
+
+    // Clear console if one build is done.
+    if (!isDone('server') && !isDone('client') && isInteractive) {
+      clearConsole()
+    }
+
+    // If errors exist, only show errors.
+    if (errors.length) {
+      // Only keep the first error. Others are often indicative
+      // of the same problem, but confuse the reader with noise.
+      const [error] = errors
+      return logger.error(`Failed to compile ${target}.`, error)
+    }
+
+    // Show warnings if no errors were found.
+    if (warnings.length) {
+      return logger.warn(
+        `Compiled ${target} with warnings.`,
+        warnings.join('\n\n')
+      )
+    }
+
+    if (target === 'server') {
+      // TODO start server
+    }
+
+    logger.done(`Compiled ${target} sucessfully!`)
+    setDone(target)
+
+    // We print the instructions only if both compilers were sucessfully.
+    if (isDone('server') && isDone('client')) {
+      printInstructions(appName, urls)
+    }
+  })
+
   // Remove all content but keep the directory so that
   // if you're in it, you don't end up in trash
   fs.emptyDirSync(paths.appBuild)
@@ -55,37 +129,14 @@ const start = async () => {
   const serverConfig = createConfig('node', 'dev', publicPath)
   const clientConfig = createConfig('web', 'dev', publicPath)
 
-  if (isInteractive) {
-    clearConsole()
-  }
+  // Now create the compilers and pass in the emitter in order to listen
+  // for state changes.
+  const serverCompiler = createCompiler(webpack, serverConfig, emitter)
+  const clientCompiler = createCompiler(webpack, clientConfig, emitter)
 
-  // Initially show output so the user has immediate feedback
-  logger.start('Compiling...')
-
-  const serverCompiler = createCompiler({
-    webpack,
-    config: serverConfig,
-    compileState,
-    appName,
-    urls,
-  })
-
-  // Start our server webpack instance in watch mode.
-  serverCompiler.watch(
-    {
-      quiet: true,
-    },
-    () => {}
-  )
-
-  // Compile our assets with webpack
-  const clientCompiler = createCompiler({
-    webpack,
-    config: clientConfig,
-    compileState,
-    appName,
-    urls,
-  })
+  // We use the watch mode for the server. Webpack will listen to file changes
+  // and trigger a recompile. Assets are saved in the server build directory.
+  serverCompiler.watch({}, () => {})
 
   // Create a new instance of WebpackDevServer for our client assets.
   // This will actually run on a different port than the users app.
@@ -94,7 +145,8 @@ const start = async () => {
     createDevServerConfig({ protocol, host, port: portDev })
   )
 
-  // Start WebpackDevServer
+  // Start WebpackDevServer.
+  // It will serve our client assets on the specified port.
   clientDevServer.listen(portDev, err => {
     if (err) {
       logger.error(err)
