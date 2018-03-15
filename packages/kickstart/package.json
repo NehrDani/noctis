@@ -1,5 +1,5 @@
 {
-  "name": "kickstart",
+  "name": "@nehrdani/kickstart",
   "version": "0.5.0",
   "description": "Build cutting-egde, isomorphic React applications with ease",
   "repository": "git@github.com:NehrDani/kickstart.git",

@@ -1,5 +1,5 @@
 {
-  "name": "kickstart-dev-utils",
+  "name": "@nehrdani/kickstart-dev-utils",
   "version": "0.5.0",
   "description": "Utilities and helpers used by Kickstart",
   "repository": "git@github.com:NehrDani/kickstart.git",
