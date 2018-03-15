@@ -27,7 +27,7 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
     // It enables caching results in ./node_modules/.cache/babel-loader/
     // directory for faster rebuilds.
     cacheDirectory: true,
-    presets: [require.resolve('babel-preset-kickstart')],
+    presets: [require.resolve('@nehrdani/babel-preset-kickstart')],
   }
   const cssOptions = {
     minify: IS_PROD,
@@ -247,7 +247,7 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
         // When you save a file, the client will either apply hot updates (in case
         // of CSS changes), or refresh the page (in case of JS changes). When you
         // make a syntax error, this client will display a syntax error overlay.
-        require.resolve('kickstart-dev-utils/webpackHotDevClient'),
+        require.resolve('@nehrdani/kickstart-dev-utils/webpackHotDevClient'),
         // Finally, this is your app's code:
         paths.appClientJs,
         // We include the app code last so that if there is a runtime error during

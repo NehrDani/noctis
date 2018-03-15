@@ -25,7 +25,7 @@ const {
 } = require('react-dev-utils/FileSizeReporter')
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages')
 const printBuildError = require('react-dev-utils/printBuildError')
-const logger = require('kickstart-dev-utils/logger')
+const logger = require('@nehrdani/kickstart-dev-utils/logger')
 const createConfig = require('../config/createConfig')
 const paths = require('../config/paths')
 

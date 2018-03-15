@@ -22,11 +22,11 @@ const fs = require('fs-extra')
 const clearConsole = require('react-dev-utils/clearConsole')
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles')
 const { prepareUrls } = require('react-dev-utils/WebpackDevServerUtils')
-const logger = require('kickstart-dev-utils/logger')
-const createCompiler = require('kickstart-dev-utils/createCompiler')
-const getServerSettings = require('kickstart-dev-utils/getServerSettings')
-const printInstructions = require('kickstart-dev-utils/printInstructions')
-const createServerProcess = require('kickstart-dev-utils/createServerProcess')
+const logger = require('@nehrdani/kickstart-dev-utils/logger')
+const createCompiler = require('@nehrdani/kickstart-dev-utils/createCompiler')
+const getServerSettings = require('@nehrdani/kickstart-dev-utils/getServerSettings')
+const printInstructions = require('@nehrdani/kickstart-dev-utils/printInstructions')
+const createServerProcess = require('@nehrdani/kickstart-dev-utils/createServerProcess')
 const {
   isDone,
   isInvalid,
@@ -35,7 +35,7 @@ const {
   unsetDone,
   setInvalid,
   unsetInvalid,
-} = require('kickstart-dev-utils/compilerStates')
+} = require('@nehrdani/kickstart-dev-utils/compilerStates')
 const createConfig = require('../config/createConfig')
 const createDevServerConfig = require('../config/createDevServerConfig')
 const paths = require('../config/paths')
