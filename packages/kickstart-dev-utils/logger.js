@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 'use strict'
 
 const chalk = require('chalk')
@@ -35,9 +36,9 @@ const logTypes = {
   },
 }
 
-const write = (type, text, verbose) => {
-  const logType = logTypes[type]
-  const textToLog = `${chalk[logType.bg].black(logType.msg)} ${chalk[logType.text](text)}`
+const write = (type, log, verbose) => {
+  const { bg, text, msg } = logTypes[type]
+  const textToLog = `${chalk[bg].black(msg)} ${chalk[text](log)}`
 
   console.log(textToLog)
 

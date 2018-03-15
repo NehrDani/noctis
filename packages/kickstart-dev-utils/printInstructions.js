@@ -4,19 +4,19 @@ const chalk = require('chalk')
 const logger = require('./logger')
 
 const printInstructions = (appName, urls) => {
-  console.log(`You can now view ${chalk.bold(appName)} in the browser.\n`)
+  logger.log(`You can now view ${chalk.bold(appName)} in the browser.\n`)
 
-  console.log(
+  logger.log(
     `  ${chalk.bold('Local:')}            ${urls.localUrlForTerminal}`
   )
 
   if (urls.lanUrlForTerminal) {
-    console.log(
+    logger.log(
       `  ${chalk.bold('On Your Network:')}  ${urls.lanUrlForTerminal}`
     )
   }
 
-  console.log()
+  logger.log()
   logger.info('Note that the development build is not optimized.\n')
 }
 
