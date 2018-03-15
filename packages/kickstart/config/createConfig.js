@@ -1,11 +1,11 @@
 'use strict'
 
+const path = require('path')
 const webpack = require('webpack')
 const autoprefixer = require('autoprefixer')
 const nodeExternals = require('webpack-node-externals')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
-const StartServerPlugin = require('start-server-webpack-plugin')
 const ManifestPlugin = require('webpack-manifest-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin')
@@ -33,9 +33,7 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
     minify: IS_PROD,
     modules: true,
     importLoaders: 1,
-    localIdentName: IS_PROD
-      ? '[hash:base64:7]'
-      : `[path]__[name]__[local]${IS_DEV ? '' : '--[hash:base64:5]'}`,
+    localIdentName: '[path]__[name]___[local]',
   }
   const postCssOptions = {
     // Necessary for external CSS imports to work
@@ -66,6 +64,18 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
     target,
     devtool: IS_DEV ? 'cheap-module-source-map' : 'source-map',
     bail: !IS_DEV,
+    resolve: {
+      // This allows you to set a fallback for where Webpack should look for modules.
+      // We placed these paths second because we want `node_modules` to "win"
+      // if there are any conflicts. This matches Node resolution mechanism.
+      // https://github.com/facebook/create-react-app/issues/253
+      modules: ['node_modules'].concat(
+        // It is guaranteed to exist because we tweak it in `env.js`
+        process.env.NODE_PATH.split(path.delimiter).filter(Boolean)
+      ),
+      // These are the reasonable defaults supported by the Node ecosystem.
+      extensions: ['.js', '.json'],
+    },
     module: {
       strictExportPresence: true,
       rules: [
@@ -139,12 +149,6 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
       IS_NODE &&
         new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 1,
-      }),
-      // Automatically start the server when done compiling.
-      IS_NODE &&
-        IS_DEV &&
-        new StartServerPlugin({
-        name: 'server.js',
       }),
       // Makes some environment variables available to the JS code, for example:
       // if (process.env.NODE_ENV === 'development') { ... }. See `./env.js`.
@@ -234,10 +238,6 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
   }
 
   if (IS_WEB) {
-    const filename = IS_PROD
-      ? '[chunkhash:8]'
-      : `[name]${IS_DEV ? '' : '.[chunkhash:4]'}`
-
     config.entry = {
       client: [
         // Ship a few polyfills by default:
@@ -260,9 +260,16 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
       // Add /* filename */ comments to generated require()s in the output.
       pathinfo: IS_DEV,
       path: paths.appClientBuild,
-      filename: `${filename}.js`,
-      chunkFilename: `${filename}.chunk.js`,
+      filename: IS_DEV ? '[name].js' : '[name].[chunkhash:8].js',
+      chunkFilename: IS_DEV
+        ? '[name].chunk.js'
+        : '[name].[chunkhash:8].chunk.js',
       publicPath,
+      // Point sourcemap entries to original disk location (format as URL on Windows)
+      devtoolModuleFilenameTemplate: info =>
+        path
+          .relative(paths.appSrc, info.absoluteResourcePath)
+          .replace(/\\/g, '/'),
     }
 
     // Some libraries import Node modules but don't use them in the browser.
