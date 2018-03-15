@@ -1,13 +1,15 @@
 {
   "name": "kickstart-dev-utils",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Utilities and helpers used by Kickstart",
   "repository": "git@github.com:NehrDani/kickstart.git",
   "author": "Daniel Nehring <nehrdani@gmail.com>",
   "license": "MIT",
   "files": [
+    "compilerStates.js",
     "createCompiler.js",
-    "FriendlyErrorsPlugin.js",
+    "createServerProcess.js",
+    "getServerSettings.js",
     "logger.js",
     "printInstructions.js",
     "webpackHotDevClient.js"
