@@ -2,18 +2,20 @@
 
 const states = {
   server: {
-    invalid: false,
+    invalid: true,
     done: false,
   },
   client: {
-    invalid: false,
+    invalid: true,
     done: false,
   },
 }
 
-const isDone = (...targets) => targets.every(target => states[target].done)
-const isInvalid = (...targets) =>
-  targets.every(target => states[target].invalid)
+const isDone = target => states[target].done
+const isInvalid = target => states[target].invalid
+const hasChanged = target =>
+  (!isDone(target) && isInvalid(target)) ||
+  (isDone(target) && !isInvalid(target))
 const setDone = target => {
   states[target].done = true
 }
@@ -30,6 +32,7 @@ const unsetInvalid = target => {
 module.exports = {
   isDone,
   isInvalid,
+  hasChanged,
   setDone,
   unsetDone,
   setInvalid,
