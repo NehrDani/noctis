@@ -15,6 +15,7 @@ process.on('unhandledRejection', err => {
 require('../config/env')
 
 const EventEmitter = require('events')
+const path = require('path')
 const webpack = require('webpack')
 const WebpackDevServer = require('webpack-dev-server')
 const fs = require('fs-extra')
@@ -25,6 +26,7 @@ const logger = require('kickstart-dev-utils/logger')
 const createCompiler = require('kickstart-dev-utils/createCompiler')
 const getServerSettings = require('kickstart-dev-utils/getServerSettings')
 const printInstructions = require('kickstart-dev-utils/printInstructions')
+const createServerProcess = require('kickstart-dev-utils/createServerProcess')
 const {
   isDone,
   isInvalid,
@@ -63,6 +65,12 @@ const start = async () => {
   const publicPath = `${protocol}://${host}:${portDev}/`
   const urls = prepareUrls(protocol, host, port)
 
+  // This is our server process. Here we can start an stop the server
+  // due to the appropiate event.
+  const serverProcess = createServerProcess(
+    path.resolve(paths.appServerBuild, 'server.js')
+  )
+
   // We use the same eventEmitter on both builds. In addition with
   // controlled compilerStates we are able to check the state of
   // both compilers when one of them fires an event. This allows us to
@@ -77,8 +85,9 @@ const start = async () => {
       clearConsole()
     }
 
+    // Stopping server while recompiling.
     if (target === 'server') {
-      // TODO stop server
+      serverProcess.stop()
     }
 
     logger.start(`Compiling ${target}...`)
@@ -88,7 +97,7 @@ const start = async () => {
   emitter.on('done', async ({ target, warnings, errors }) => {
     // Clear console if one build has changes.
     if (hasChanged('server') && hasChanged('client') && isInteractive) {
-      clearConsole()
+      // clearConsole()
     }
 
     // If errors exist, only show errors.
@@ -107,8 +116,9 @@ const start = async () => {
       )
     }
 
+    // Restart the server after compiling is done.
     if (target === 'server') {
-      // TODO start server
+      serverProcess.start()
     }
 
     logger.done(`Compiled ${target} sucessfully!`)
