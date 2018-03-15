@@ -28,6 +28,7 @@ const printInstructions = require('kickstart-dev-utils/printInstructions')
 const {
   isDone,
   isInvalid,
+  hasChanged,
   setDone,
   unsetDone,
   setInvalid,
@@ -85,10 +86,8 @@ const start = async () => {
   })
 
   emitter.on('done', async ({ target, warnings, errors }) => {
-    unsetInvalid(target)
-
-    // Clear console if one build is done.
-    if (!isDone('server') && !isDone('client') && isInteractive) {
+    // Clear console if one build has changes.
+    if (hasChanged('server') && hasChanged('client') && isInteractive) {
       clearConsole()
     }
 
@@ -118,6 +117,11 @@ const start = async () => {
     // We print the instructions only if both compilers were sucessfully.
     if (isDone('server') && isDone('client')) {
       printInstructions(appName, urls)
+
+      // We need to unset the invalid state here to not run out of sync
+      // if only one build changes. This resets the hasChanged state.
+      unsetInvalid('server')
+      unsetInvalid('client')
     }
   })
 
