@@ -6,7 +6,7 @@ This package includes some utilities used by [Kickstart](https://github.com/nehr
 
 These utilities come by default with [Kickstart](https://github.com/nehrdani/kickstart), which includes it by default. **You don’t need to install it separately in Kickstart projects.**
 
-## Usage Outside of Create React App
+## Usage Outside of Kickstart
 
 If you don’t use Kickstart, or if you, you may keep using these utilities. Their development will be aligned with Kickstart, so major versions of these utilities may come out relatively often. Feel free to fork or copy and paste them into your projects if you’d like to have more control over them, or feel free to use the old versions.
 
@@ -18,13 +18,13 @@ There is no single entry point. You can only import individual top-level modules
 
 Creates a Webpack compiler instance. Takes the `require('webpack')` entry point as the first argument and the `webpack.config.js` as the second. The emitter must be an instance of `require('EventEmitter')`.
 It emits some events during compilation:
-- `emitter.emit('invalid', data: Object)`:
+- `emitter.emit('invalid', data: Object)`
 ```js
 data = {
   target: String, // server, client
 }
 ```
-- `emitter.emit('done', data: Object)`: data is an object containing
+- `emitter.emit('done', data: Object)`
 ```js
 data = {
   target: String, // server, client
@@ -45,7 +45,7 @@ const createServerProcess = require('@nehrdani/kickstart-dev-utils/createServerP
 const serverProcess = createServerProcess('../build/server')
 
 // After compile
-serverProcess.star()
+serverProcess.start()
 
 // Before recompile
 serverProcess.stop()
