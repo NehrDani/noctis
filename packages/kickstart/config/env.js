@@ -65,10 +65,10 @@ const getClientEnvironment = () => {
   const stringified = Object.keys(process.env)
     .filter(key => KICKSTART.test(key))
     .reduce(
-      (env, key) => ({
-        ...env,
-        [key]: JSON.stringify(process.env[key]),
-      }),
+      (env, key) =>
+        Object.assign({}, env, {
+          [key]: JSON.stringify(process.env[key]),
+        }),
       {
         // Useful for determining whether we’re running in production mode.
         // Most importantly, it switches React into the correct mode.

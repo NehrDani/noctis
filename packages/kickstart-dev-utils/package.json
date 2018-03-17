@@ -8,6 +8,9 @@
   "repository": "git@github.com:NehrDani/kickstart.git",
   "author": "Daniel Nehring <nehrdani@gmail.com>",
   "license": "MIT",
+  "engines": {
+    "node": ">=8"
+  },
   "files": [
     "compilerStates.js",
     "createCompiler.js",
