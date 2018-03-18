@@ -9,7 +9,7 @@
   "author": "Daniel Nehring <nehrdani@gmail.com>",
   "license": "MIT",
   "engines": {
-    "node": ">=8"
+    "node": ">=8.0.0"
   },
   "bin": {
     "kickstart": "./bin/kickstart.js"
