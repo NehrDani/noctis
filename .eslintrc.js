@@ -8,6 +8,8 @@ module.exports = {
   },
   extends: ['eslint:recommended', 'standard'],
   rules: {
+    'no-console': 'off',
+    strict: ['error', 'global'],
     'comma-dangle': [
       'error',
       {
