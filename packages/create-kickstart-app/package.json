@@ -1,0 +1,35 @@
+{
+  "name": "@nehrdani/create-kickstart-app",
+  "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Build cutting-egde, isomorphic React applications with zero configuratio",
+  "repository": "git@github.com:NehrDani/kickstart.git",
+  "author": "Daniel Nehring <nehrdani@gmail.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "bin": {
+    "create-kickstart-app": "./bin/createKickstartApp.js"
+  },
+  "files": [
+    "bin",
+    "template",
+    "utils"
+  ],
+  "keywords": [
+    "kickstart",
+    "react",
+    "webpack",
+    "ssr",
+    "isomorphic",
+    "babel",
+    "create"
+  ],
+  "dependencies": {
+    "chalk": "^2.3.2",
+    "commander": "^2.15.0"
+  }
+}
