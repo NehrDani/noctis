@@ -9,21 +9,23 @@ const { name, version, engines } = require('../package.json')
 // syntax errors
 checkNodeVersion(engines)
 
-const createApp = require('../utils/createApp')
+let projectName
 
 const program = new Command(name)
-program
   .version(version)
   .arguments('<project<directory')
   .usage(`${chalk.green('<project-directory>')} [options]`)
-  .action(name =>
-    createApp(name, program.verbose, program.useNpm, program.name())
-  )
+  .action(name => {
+    projectName = name
+  })
   .option('-v --verbose', 'print additional logs')
-  .option('-i --info', 'print environment debug info')
   .option('--use-npm')
   .allowUnknownOption()
   .on('--help', () => {
     console.log(`    Only ${chalk.green('<project-directory>')} is required.`)
   })
   .parse(process.argv)
+
+const createApp = require('../utils/createApp')
+
+createApp(projectName, program.verbose, program.useNpm, program.name())
