@@ -1,4 +1,3 @@
-
 const semver = require('semver')
 const { unsupportedNodeVersion } = require('../utils/messages')
 
