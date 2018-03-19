@@ -1,5 +1,3 @@
-'use strict'
-
 const path = require('path')
 const webpack = require('webpack')
 const autoprefixer = require('autoprefixer')
@@ -40,6 +38,7 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
     // https://github.com/facebook/create-react-app/issues/2677
     ident: 'postcss',
     plugins: () => [
+      require('postcss-flexbugs-fixes'),
       autoprefixer({
         browsers: ['last 2 versions', 'not ie < 11'],
         flexbox: 'no-2009',
