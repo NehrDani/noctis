@@ -1,31 +1,78 @@
 #!/usr/bin/env node
 
-const { Command } = require('commander')
-const chalk = require('chalk')
 const checkNodeVersion = require('../utils/checkNodeVersion')
-const { name, version, engines } = require('../package.json')
+const pkg = require('../package.json')
 
-// We need to check the node version here otherwise we may run into
-// syntax errors
-checkNodeVersion(engines)
+// We need to check the node version as soon as possible.
+checkNodeVersion(pkg.engines)
 
-let projectName
+const chalk = require('chalk')
+const fs = require('fs-extra')
+const minimist = require('minimist')
+const path = require('path')
+const copyTemplate = require('../utils/copyTemplate')
+const createPackageJson = require('../utils/createPackageJson')
+const installDependencies = require('../utils/installDependencies')
+const {
+  usage,
+  missingProjectName,
+  projectAlreadyExists,
+  abortInstallation,
+} = require('../utils/messages')
 
-const program = new Command(name)
-  .version(version)
-  .arguments('<project<directory')
-  .usage(`${chalk.green('<project-directory>')} [options]`)
-  .action(name => {
-    projectName = name
-  })
-  .option('-v --verbose', 'print additional logs')
-  .option('--use-npm')
-  .allowUnknownOption()
-  .on('--help', () => {
-    console.log(`    Only ${chalk.green('<project-directory>')} is required.`)
-  })
-  .parse(process.argv)
+const argv = minimist(process.argv.slice(2), {
+  boolean: ['help', 'version', 'use-npm'],
+  alias: {
+    help: 'h',
+    version: 'v',
+    'use-npm': 'useNpm',
+  },
+})
 
-const createApp = require('../utils/createApp')
+if (argv.version) {
+  console.log(pkg.version)
+  process.exit()
+}
 
-createApp(projectName, program.verbose, program.useNpm, program.name())
+if (argv.help) {
+  console.log(usage(pkg.name))
+  process.exit()
+}
+
+const [projectName] = argv._
+
+if (!projectName) {
+  console.log(missingProjectName(pkg.name))
+  process.exit(1)
+}
+
+if (fs.existsSync(projectName)) {
+  console.log(projectAlreadyExists(pkg.name))
+  process.exit(1)
+}
+
+const appPath = path.resolve(projectName)
+const appName = path.basename(appPath)
+
+const init = async (appPath, appName, useNpm) => {
+  console.log(`Creating a new Kickstart app in ${chalk.green(appPath)}.\n`)
+
+  // Create the app directory...
+  await fs.ensureDir(appPath)
+  // and cd into it
+  process.chdir(appPath)
+
+  await createPackageJson(appPath, appName)
+
+  console.log('Installing packages. This might take a while.')
+
+  await installDependencies(appPath, useNpm)
+
+  await copyTemplate(appPath, appName)
+}
+
+try {
+  init(appPath, appName, argv.useNpm)
+} catch (err) {
+  console.log(abortInstallation(err))
+}

@@ -7,14 +7,27 @@ Kickstart requires Node v${needed.version} or higher.
 Please update your version of Node.
 `)
 
-exports.missingProjectName = cmd => `
+exports.usage = script => `
+  Usage: ${script} ${green('<project-name>')} [options]
+
+  Options:
+
+    -v, --version  output the version number
+    --verbose      print additional logs
+    --use-npm      use ${cyan('npm')} even though ${cyan('yarn')} is available
+    -h, --help     output usage information
+
+  Only ${green('<project-name>')} is required.
+`
+
+exports.missingProjectName = script => `
 Please specify the project directory:
-  ${cyan(cmd)} ${green('<project-directory>')}
+  ${cyan(script)} ${green('<project-directory>')}
 
 For Example:
-  ${cyan(cmd)} ${green('my-kickstart-app')}
+  ${cyan(script)} ${green('my-kickstart-app')}
 
-Run ${cyan(`${cmd} --help`)} to see all options.
+Run ${cyan(`${script} --help`)} to see all options.
 `
 
 exports.projectAlreadyExists = name => `
@@ -26,6 +39,3 @@ exports.abortInstallation = err => `
 ${red('Aborting installation.')}
 ${err.message || err}
 `
-
-exports.deleteProject = (appName, dir) =>
-  `Deleting ${cyan(`${appName}/`)} from ${cyan(dir)}`
