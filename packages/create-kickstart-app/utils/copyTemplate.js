@@ -1,15 +1,16 @@
-const fs = require('fs-extra')
+const { copy, move } = require('fs-extra')
 const path = require('path')
 
-module.exports = async (appPath, appName) => {
+const templatePath = path.resolve(__dirname, '../template')
+
+module.exports = async appPath => {
   // Copy the files for the user
-  const templatePath = path.resolve(__dirname, '../template')
-  await fs.copy(templatePath, appPath)
+  await copy(templatePath, appPath)
 
   // Rename gitignore after the fact to prevent npm from renaming it
   // to .npmignore.
   // See: https://github.com/npm/npm/issues/1862
-  await fs.move(
+  await move(
     path.resolve(appPath, 'gitignore'),
     path.resolve(appPath, '.gitignore')
   )
