@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-/* eslint-disable no-console */
-'use strict'
 
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
@@ -9,13 +7,13 @@ process.on('unhandledRejection', err => {
   throw err
 })
 
-const spawn = require('react-dev-utils/crossSpawn')
+const { spawnSync } = require('child_process')
 
 const isScript = x => ['start', 'build'].includes(x)
 const [script, ...args] = process.argv.slice(2)
 
 if (isScript(script)) {
-  const { signal, status } = spawn.sync(
+  const { signal, status } = spawnSync(
     'node',
     [require.resolve(`../scripts/${script}`), ...args],
     { stdio: 'inherit' }
