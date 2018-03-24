@@ -51,7 +51,7 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
   // "css" loader resolves paths in CSS and adds assets as dependencies.
   // "style" loader turns CSS into JS modules that inject <style> tags.
   const cssLoaders = [
-    IS_DEV && require.resolve('style-loader'),
+    IS_WEB && IS_DEV && require.resolve('style-loader'),
     {
       loader: require.resolve(IS_NODE ? 'css-loader/locals' : 'css-loader'),
       options: cssOptions,
