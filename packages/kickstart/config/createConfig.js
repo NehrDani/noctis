@@ -93,22 +93,23 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
               loader: require.resolve('url-loader'),
               options: {
                 limit: 10000,
-                name: '[name].[hash:8].[ext]',
+                name: 'static/media/[name].[hash:8].[ext]',
               },
             },
             // (S)CSS Modules support
             {
               test: /\s?css$/,
               exclude: [paths.appBuild],
-              use: IS_PROD
-                ? ExtractTextPlugin.extract({
-                  fallback: {
-                    loader: require.resolve('style-loader'),
-                    options: { hmr: false },
-                  },
-                  use: cssLoaders,
-                })
-                : cssLoaders,
+              use:
+                IS_WEB && !IS_DEV
+                  ? ExtractTextPlugin.extract({
+                    fallback: {
+                      loader: require.resolve('style-loader'),
+                      options: { hmr: false },
+                    },
+                    use: cssLoaders,
+                  })
+                  : cssLoaders,
             },
             // Transform ES6 with Babel
             {
@@ -136,7 +137,7 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
               // by webpacks internal loaders.
               exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/],
               options: {
-                name: '[name].[hash:8].[ext]',
+                name: 'static/media/[name].[hash:8].[ext]',
               },
             },
           ],
@@ -147,8 +148,8 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
       // Prevent creating multiple chunks for the server.
       IS_NODE &&
         new webpack.optimize.LimitChunkCountPlugin({
-        maxChunks: 1,
-      }),
+          maxChunks: 1,
+        }),
       // Makes some environment variables available to the JS code, for example:
       // if (process.env.NODE_ENV === 'development') { ... }. See `./env.js`.
       IS_WEB && new webpack.DefinePlugin(clientEnv),
@@ -156,48 +157,48 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
       IS_WEB &&
         !IS_DEV &&
         new UglifyJsPlugin({
-        uglifyOptions: {
-          ecma: 8,
-          compress: {
-            warnings: false,
-            // Disabled because of an issue with Uglify breaking seemingly valid code:
-            // https://github.com/facebook/create-react-app/issues/2376
-            // Pending further investigation:
-            // https://github.com/mishoo/UglifyJS2/issues/2011
-            comparisons: false,
+          uglifyOptions: {
+            ecma: 8,
+            compress: {
+              warnings: false,
+              // Disabled because of an issue with Uglify breaking seemingly valid code:
+              // https://github.com/facebook/create-react-app/issues/2376
+              // Pending further investigation:
+              // https://github.com/mishoo/UglifyJS2/issues/2011
+              comparisons: false,
+            },
+            mangle: {
+              safari10: true,
+            },
+            output: {
+              comments: false,
+              // Turned on because emoji and regex is not minified properly using default
+              // https://github.com/facebook/create-react-app/issues/2488
+              ascii_only: true,
+            },
           },
-          mangle: {
-            safari10: true,
-          },
-          output: {
-            comments: false,
-            // Turned on because emoji and regex is not minified properly using default
-            // https://github.com/facebook/create-react-app/issues/2488
-            ascii_only: true,
-          },
-        },
-        // Use multi-process parallel running to improve the build speed
-        // Default number of concurrent runs: os.cpus().length - 1
-        parallel: true,
-        // Enable file caching
-        cache: true,
-        sourceMap: !IS_PROD,
-      }),
+          // Use multi-process parallel running to improve the build speed
+          // Default number of concurrent runs: os.cpus().length - 1
+          parallel: true,
+          // Enable file caching
+          cache: true,
+          sourceMap: !IS_PROD,
+        }),
       // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
       IS_WEB &&
         !IS_DEV &&
         new ExtractTextPlugin({
-        filename: '[name].[contenthash:8].css',
-      }),
+          filename: 'static/css/[name].[contenthash:8].css',
+        }),
       // Generate a manifest file which contains a mapping of all asset filenames
       // to their corresponding output file so that tools can pick it up without
       // having to parse `index.html`.
       IS_WEB &&
         !IS_DEV &&
         new ManifestPlugin({
-        fileName: 'asset-manifest.json',
-        publicPath,
-      }),
+          fileName: 'asset-manifest.json',
+          publicPath,
+        }),
       // Add module names to factory functions so they appear in browser profiler.
       IS_DEV && new webpack.NamedModulesPlugin(),
       // Add hot module replacement
@@ -219,11 +220,11 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
   if (IS_NODE) {
     config.externals = [nodeExternals()]
 
-    config.entry = [paths.appServerJs]
+    config.entry = [paths.serverSrc]
 
     // Specify webpack Node.js output path and filename
     config.output = {
-      path: paths.appServerBuild,
+      path: paths.serverBuild,
       filename: 'server.js',
       publicPath,
     }
@@ -248,7 +249,7 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
         // make a syntax error, this client will display a syntax error overlay.
         require.resolve('@nehrdani/kickstart-dev-utils/webpackHotDevClient'),
         // Finally, this is your app's code:
-        paths.appClientJs,
+        paths.clientSrc,
         // We include the app code last so that if there is a runtime error during
         // initialization, it doesn't blow up the WebpackDevServer client, and
         // changing JS code would still trigger a refresh.
@@ -258,11 +259,11 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
     config.output = {
       // Add /* filename */ comments to generated require()s in the output.
       pathinfo: IS_DEV,
-      path: paths.appClientBuild,
-      filename: IS_DEV ? '[name].js' : '[name].[chunkhash:8].js',
-      chunkFilename: IS_DEV
-        ? '[name].chunk.js'
-        : '[name].[chunkhash:8].chunk.js',
+      path: paths.clientBuild,
+      filename: `static/js/${IS_DEV ? '[name].js' : '[name].[chunkhash:8].js'}`,
+      chunkFilename: `static/js/${
+        IS_DEV ? '[name].chunk.js' : '[name].[chunkhash:8].chunk.js'
+      }`,
       publicPath,
       // Point sourcemap entries to original disk location (format as URL on Windows)
       devtoolModuleFilenameTemplate: info =>

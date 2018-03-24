@@ -1,5 +1,3 @@
-'use strict'
-
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.NODE_ENV = 'production'
 process.env.BABEL_ENV = 'production'
@@ -32,7 +30,7 @@ const paths = require('../config/paths')
 const isInteractive = process.stdout.isTTY
 
 // Warn and crash if required files are missing
-if (!checkRequiredFiles([paths.appServerJs, paths.appClientJs])) {
+if (!checkRequiredFiles([paths.serverSrc, paths.clientSrc])) {
   process.exit(1)
 }
 
@@ -91,8 +89,8 @@ const build = async () => {
   logger.log('Creating an optimized production build...\n')
 
   const [prevServerFiles, prevClientFiles] = await Promise.all([
-    measureFileSizesBeforeBuild(paths.appServerBuild),
-    measureFileSizesBeforeBuild(paths.appClientBuild),
+    measureFileSizesBeforeBuild(paths.serverBuild),
+    measureFileSizesBeforeBuild(paths.clientBuild),
   ])
 
   // Remove all content but keep the directory so that
@@ -130,17 +128,9 @@ const build = async () => {
     // Print the diffrent file sizes of the client and server after build.
     logger.log('File sizes after gzip:\n')
     logger.log(chalk.bold('Server:'))
-    printFileSizesAfterBuild(
-      server.stats,
-      prevServerFiles,
-      paths.appServerBuild
-    )
+    printFileSizesAfterBuild(server.stats, prevServerFiles, paths.serverBuild)
     logger.log(chalk.bold('Client:'))
-    printFileSizesAfterBuild(
-      client.stats,
-      prevClientFiles,
-      paths.appClientBuild
-    )
+    printFileSizesAfterBuild(client.stats, prevClientFiles, paths.clientBuild)
 
     process.exit()
   } catch (err) {

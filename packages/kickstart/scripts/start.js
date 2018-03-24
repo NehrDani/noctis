@@ -1,4 +1,3 @@
-'use strict'
 
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.NODE_ENV = 'development'
@@ -43,7 +42,7 @@ const paths = require('../config/paths')
 const isInteractive = process.stdout.isTTY
 
 // Warn and crash if required files are missing
-if (!checkRequiredFiles([paths.appServerJs, paths.appClientJs])) {
+if (!checkRequiredFiles([paths.serverSrc, paths.clientSrc])) {
   process.exit(1)
 }
 
@@ -68,7 +67,7 @@ const start = async () => {
   // This is our server process. Here we can start an stop the server
   // due to the appropiate event.
   const serverProcess = createServerProcess(
-    path.resolve(paths.appServerBuild, 'server.js')
+    path.resolve(paths.serverBuild, 'server.js')
   )
 
   // We use the same eventEmitter on both builds. In addition with

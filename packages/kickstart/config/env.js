@@ -1,5 +1,3 @@
-'use strict'
-
 const fs = require('fs')
 const path = require('path')
 const paths = require('./paths')
@@ -56,7 +54,7 @@ process.env.NODE_PATH = (process.env.NODE_PATH || '')
   .map(folder => path.resolve(appDirectory, folder))
   .join(path.delimiter)
 
-// Grab KICKSTART_* environment variables and prepare them to be
+// Grab NODE_ENV and KICKSTART_* environment variables and prepare them to be
 // injected into the application via DefinePlugin in Webpack configuration.
 const KICKSTART = /^KICKSTART_/i
 
@@ -74,10 +72,8 @@ const getClientEnvironment = () => {
         // Most importantly, it switches React into the correct mode.
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
         PORT: JSON.stringify(process.env.PORT || 3000),
-        VERBOSE: !!JSON.stringify(process.env.VERBOSE),
         HOST: JSON.stringify(process.env.HOST || '0.0.0.0'),
-        // only for production builds. Useful if you need to serve from a CDN
-        PUBLIC_PATH: JSON.stringify(process.env.PUBLIC_PATH || '/'),
+        KICKSTART_ASSET_MANIFEST: JSON.stringify(paths.appAssets),
       }
     )
 
