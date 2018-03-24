@@ -1,5 +1,3 @@
-'use strict'
-
 // This is similar to how `env` works in Babel:
 // https://babeljs.io/docs/usage/babelrc/#env-option
 // We are not using `env` because it’s ignored in versions > babel-core@6.10.4:
@@ -10,7 +8,7 @@ const isEnv = env => ['development', 'test', 'production'].includes(env)
 const ENV = process.env.BABEL_ENV || process.env.NODE_ENV
 if (!isEnv(ENV)) {
   throw new Error(
-    'Using `babel-preset-react-app` requires that you specify `NODE_ENV` or ' +
+    'Using `babel-preset-kickstart-app` requires that you specify `NODE_ENV` or ' +
       '`BABEL_ENV` environment variables. Valid values are "development", ' +
       '"test", and "production". Instead, received: ' +
       JSON.stringify(ENV) +
@@ -90,10 +88,7 @@ const presets = [
     {
       targets: {
         node: 'current',
-        browsers: [
-          'last 2 versions',
-          'not ie < 11',
-        ],
+        browsers: ['last 2 versions', 'not ie < 11'],
         // We currently minify with uglify
         // Remove after https://github.com/mishoo/UglifyJS2/issues/448
         uglify: true,
