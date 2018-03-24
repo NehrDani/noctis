@@ -1,10 +1,10 @@
 {
   "name": "@nehrdani/babel-preset-kickstart",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "publishConfig": {
     "access": "public"
   },
-  "description": "Babel presets for Kickstart",
+  "description": "Babel presets used by Kickstart",
   "author": "Daniel Nehring <nehrdani@gmail.com>",
   "repository": "git@github.com:NehrDani/kickstart.git",
   "license": "MIT",
