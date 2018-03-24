@@ -1,10 +1,10 @@
 {
   "name": "@nehrdani/create-kickstart-app",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "publishConfig": {
     "access": "public"
   },
-  "description": "Build cutting-egde, isomorphic React applications with zero configuratio",
+  "description": "Build cutting-egde, isomorphic React applications with ease",
   "repository": "git@github.com:NehrDani/kickstart.git",
   "author": "Daniel Nehring <nehrdani@gmail.com>",
   "license": "MIT",
@@ -30,8 +30,8 @@
   ],
   "dependencies": {
     "chalk": "^2.3.2",
-    "commander": "^2.15.0",
     "fs-extra": "^5.0.0",
+    "minimist": "^1.2.0",
     "ora": "^2.0.0"
   }
 }
