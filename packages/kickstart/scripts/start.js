@@ -19,9 +19,7 @@ const WebpackDevServer = require('webpack-dev-server')
 const fs = require('fs-extra')
 const clearConsole = require('@nehrdani/kickstart-dev-utils/clearConsole')
 const checkRequiredFiles = require('@nehrdani/kickstart-dev-utils/checkRequiredFiles')
-const {
-  prepareUrls,
-} = require('@nehrdani/kickstart-dev-utils/WebpackDevServerUtils')
+const prepareUrls = require('@nehrdani/kickstart-dev-utils/prepareUrls')
 const logger = require('@nehrdani/kickstart-dev-utils/logger')
 const createCompiler = require('@nehrdani/kickstart-dev-utils/createCompiler')
 const getServerSettings = require('@nehrdani/kickstart-dev-utils/getServerSettings')

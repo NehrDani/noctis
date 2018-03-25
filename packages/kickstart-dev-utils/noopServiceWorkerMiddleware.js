@@ -1,1 +1,1 @@
-module.exports = require('reat-dev-utils/noopServiceWorkerMiddleware')
+module.exports = require('react-dev-utils/noopServiceWorkerMiddleware')
