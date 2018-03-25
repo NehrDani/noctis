@@ -1,6 +1,3 @@
-/* eslint-disable no-console */
-'use strict'
-
 const chalk = require('chalk')
 
 const logTypes = {

@@ -1,10 +1,8 @@
-'use strict'
-
 const { fork } = require('child_process')
 
 // A simple but effective tool to handle starting, stopping and restarting
 // the server in development
-const createServerProcess = pathToServer => {
+module.exports = pathToServer => {
   let serverProcess
 
   return {
@@ -19,5 +17,3 @@ const createServerProcess = pathToServer => {
     },
   }
 }
-
-module.exports = createServerProcess

@@ -1,6 +1,4 @@
-'use strict'
-
-const { choosePort } = require('react-dev-utils/WebpackDevServerUtils')
+const choosePort = require('./choosePort')
 
 const getServerSettings = async () => {
   const host = process.env.HOST || '0.0.0.0'

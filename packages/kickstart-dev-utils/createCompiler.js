@@ -1,10 +1,8 @@
-'use strict'
-
-const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages')
+const formatWebpackMessages = require('./formatWebpackMessages')
 
 // "Compiler" is a low-level interface to Webpack.
 // It lets us listen to some events and provide our own custom messages.
-const createCompiler = (webpack, config, emitter) => {
+module.exports = (webpack, config, emitter) => {
   const compiler = webpack(config)
   const target = config.target === 'node' ? 'server' : 'client'
 
@@ -34,5 +32,3 @@ const createCompiler = (webpack, config, emitter) => {
 
   return compiler
 }
-
-module.exports = createCompiler
