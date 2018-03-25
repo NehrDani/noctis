@@ -1,4 +1,3 @@
-
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.NODE_ENV = 'development'
 process.env.BABEL_ENV = 'development'
@@ -18,9 +17,11 @@ const path = require('path')
 const webpack = require('webpack')
 const WebpackDevServer = require('webpack-dev-server')
 const fs = require('fs-extra')
-const clearConsole = require('react-dev-utils/clearConsole')
-const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles')
-const { prepareUrls } = require('react-dev-utils/WebpackDevServerUtils')
+const clearConsole = require('@nehrdani/kickstart-dev-utils/clearConsole')
+const checkRequiredFiles = require('@nehrdani/kickstart-dev-utils/checkRequiredFiles')
+const {
+  prepareUrls,
+} = require('@nehrdani/kickstart-dev-utils/WebpackDevServerUtils')
 const logger = require('@nehrdani/kickstart-dev-utils/logger')
 const createCompiler = require('@nehrdani/kickstart-dev-utils/createCompiler')
 const getServerSettings = require('@nehrdani/kickstart-dev-utils/getServerSettings')

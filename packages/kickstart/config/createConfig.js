@@ -6,7 +6,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 const ManifestPlugin = require('webpack-manifest-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin')
+const WatchMissingNodeModulesPlugin = require('@nehrdani/kickstart-dev-utils/WatchMissingNodeModulesPlugin')
 const paths = require('./paths')
 const getClientEnv = require('./env')
 

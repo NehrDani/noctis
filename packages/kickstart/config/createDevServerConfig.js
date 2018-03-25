@@ -1,6 +1,6 @@
-const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware')
-const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMiddleware')
-const ignoredFiles = require('react-dev-utils/ignoredFiles')
+const errorOverlayMiddleware = require('@nehrdani/kickstart-dev-utils/errorOverlayMiddleware')
+const noopServiceWorkerMiddleware = require('@nehrdani/kickstart-dev-utils/noopServiceWorkerMiddleware')
+const ignoredFiles = require('@nehrdani/kickstart-dev-utils/ignoredFiles')
 const paths = require('./paths')
 
 module.exports = ({ host = '0.0.0.0', port = 3001, protocol = 'http' }) => ({
