@@ -1,13 +1,13 @@
 const { red, cyan, green } = require('chalk')
 
-exports.unsupportedNodeVersion = (current, needed) =>
+const unsupportedNodeVersion = (current, needed) =>
   red(`
 You are running Node ${current}.
 Kickstart requires Node v${needed.version} or higher.
 Please update your version of Node.
 `)
 
-exports.usage = script => `
+const usage = script => `
   Usage: ${script} ${green('<project-name>')} [options]
 
   Options:
@@ -20,7 +20,7 @@ exports.usage = script => `
   Only ${green('<project-name>')} is required.
 `
 
-exports.missingProjectName = script => `
+const missingProjectName = script => `
 Please specify the project directory:
   ${cyan(script)} ${green('<project-directory>')}
 
@@ -30,12 +30,19 @@ For Example:
 Run ${cyan(`${script} --help`)} to see all options.
 `
 
-exports.projectAlreadyExists = name => `
+const projectAlreadyExists = name => `
 Uh oh! Looks like there's already a project called ${red(name)}.
 Please try a different name or delete it.
 `
 
-exports.abortInstallation = err => `
+const abortInstallation = err => `
 ${red('Aborting installation.')}
 ${err.message || err}
 `
+module.exports = {
+  unsupportedNodeVersion,
+  usage,
+  missingProjectName,
+  projectAlreadyExists,
+  abortInstallation,
+}
