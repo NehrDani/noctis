@@ -25,15 +25,7 @@ const createCompiler = require('@nehrdani/kickstart-dev-utils/createCompiler')
 const getServerSettings = require('@nehrdani/kickstart-dev-utils/getServerSettings')
 const printInstructions = require('@nehrdani/kickstart-dev-utils/printInstructions')
 const createServerProcess = require('@nehrdani/kickstart-dev-utils/createServerProcess')
-const {
-  isDone,
-  isInvalid,
-  hasChanged,
-  setDone,
-  unsetDone,
-  setInvalid,
-  unsetInvalid,
-} = require('@nehrdani/kickstart-dev-utils/compilerStates')
+const createState = require('@nehrdani/kickstart-dev-utils/createState')
 const createConfig = require('../config/createConfig')
 const createDevServerConfig = require('../config/createDevServerConfig')
 const paths = require('../config/paths')
@@ -68,6 +60,17 @@ const start = async () => {
   const serverProcess = createServerProcess(
     path.resolve(paths.serverBuild, 'server.js')
   )
+
+  // We create the state here to be used in conunction with the eventEmitter.
+  const {
+    isDone,
+    isInvalid,
+    hasChanged,
+    setDone,
+    unsetDone,
+    setInvalid,
+    unsetInvalid,
+  } = createState()
 
   // We use the same eventEmitter on both builds. In addition with
   // controlled compilerStates we are able to check the state of
