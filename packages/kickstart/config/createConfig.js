@@ -200,22 +200,26 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
 
   if (IS_WEB) {
     return Object.assign({}, config, {
-      entry: [
-        // Ship a few polyfills by default:
-        require.resolve('./polyfills'),
-        // Include an alternative client for WebpackDevServer. A client's job is to
-        // connect to WebpackDevServer by a socket and get notified about changes.
-        // When you save a file, the client will either apply hot updates (in case
-        // of CSS changes), or refresh the page (in case of JS changes). When you
-        // make a syntax error, this client will display a syntax error overlay.
-        IS_DEV &&
-          require.resolve('@nehrdani/kickstart-dev-utils/webpackHotDevClient'),
-        // Finally, this is your app's code:
-        paths.clientSrc,
-        // We include the app code last so that if there is a runtime error during
-        // initialization, it doesn't blow up the WebpackDevServer client, and
-        // changing JS code would still trigger a refresh.
-      ].filter(Boolean),
+      entry: {
+        client: [
+          // Ship a few polyfills by default:
+          require.resolve('./polyfills'),
+          // Include an alternative client for WebpackDevServer. A client's job is to
+          // connect to WebpackDevServer by a socket and get notified about changes.
+          // When you save a file, the client will either apply hot updates (in case
+          // of CSS changes), or refresh the page (in case of JS changes). When you
+          // make a syntax error, this client will display a syntax error overlay.
+          IS_DEV &&
+            require.resolve(
+              '@nehrdani/kickstart-dev-utils/webpackHotDevClient'
+            ),
+          // Finally, this is your app's code:
+          paths.clientSrc,
+          // We include the app code last so that if there is a runtime error during
+          // initialization, it doesn't blow up the WebpackDevServer client, and
+          // changing JS code would still trigger a refresh.
+        ].filter(Boolean),
+      },
       output: {
         // Add /* filename */ comments to generated require()s in the output.
         pathinfo: IS_DEV,
