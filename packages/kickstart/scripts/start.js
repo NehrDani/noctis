@@ -95,7 +95,7 @@ const start = async () => {
   emitter.on('done', async ({ target, warnings, errors }) => {
     // Clear console if one build has changes.
     if (hasChanged('server') && hasChanged('client') && isInteractive) {
-      // clearConsole()
+      clearConsole()
     }
 
     // If errors exist, only show errors.
