@@ -58,7 +58,7 @@ process.env.NODE_PATH = (process.env.NODE_PATH || '')
 // injected into the application via DefinePlugin in Webpack configuration.
 const KICKSTART = /^KICKSTART_/i
 
-const getClientEnvironment = () => {
+const getClientEnvironment = publicPath => {
   // Stringify all values so we can feed into Webpack DefinePlugin
   const stringified = Object.keys(process.env)
     .filter(key => KICKSTART.test(key))
@@ -74,6 +74,7 @@ const getClientEnvironment = () => {
         PORT: JSON.stringify(process.env.PORT || 3000),
         HOST: JSON.stringify(process.env.HOST || '0.0.0.0'),
         KICKSTART_ASSET_MANIFEST: JSON.stringify(paths.appAssets),
+        PUBLIC_PATH: JSON.stringify(publicPath),
       }
     )
 
