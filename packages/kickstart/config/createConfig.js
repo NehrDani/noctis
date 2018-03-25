@@ -195,6 +195,10 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
           maxChunks: 1,
         }),
       ],
+      node: {
+        __dirname: false,
+        __filename: false,
+      },
     })
   }
 
