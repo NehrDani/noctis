@@ -28,8 +28,8 @@
     "babel"
   ],
   "dependencies": {
-    "babel-preset-noctis": "^0.2.0",
-    "noctis-dev-utils": "^0.6.0",
+    "babel-preset-noctis": "^0.2.1",
+    "noctis-dev-utils": "^0.7.0",
     "autoprefixer": "^8.1.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
