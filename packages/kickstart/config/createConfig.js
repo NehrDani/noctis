@@ -32,7 +32,8 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
     modules: true,
     importLoaders: 2,
     sourceMap: true,
-    localIdentName: '[path]__[name]___[local]',
+    camelCase: 'dashes',
+    localIdentName: IS_DEV ? '[name]__[local]' : '[hash:base64:8]',
   }
   const postCssOptions = {
     // Necessary for external CSS imports to work
