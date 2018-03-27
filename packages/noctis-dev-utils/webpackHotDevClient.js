@@ -55,7 +55,7 @@ if (module.hot && typeof module.hot.dispose === 'function') {
 var connection = new SockJS(
   publicPath +
     // Hardcoded in WebpackDevServer.
-    '/sockjs-node'
+    'sockjs-node'
 )
 
 // Unlike WebpackDevServer client, we won't try to reconnect
