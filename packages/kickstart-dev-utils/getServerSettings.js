@@ -16,10 +16,9 @@ const getServerSettings = async () => {
     return
   }
 
-  // We do this before importing the wepack.config.client.dev otherwise
-  // PORT and PORT_DEV won't be set at new webpack.DefinePlugin(env.stringified)
+  // We do this before creating the webpack config otherwise
+  // PORT won't be set at new webpack.DefinePlugin()
   process.env.PORT = port
-  process.env.PORT_DEV = portDev
 
   return {
     protocol,
