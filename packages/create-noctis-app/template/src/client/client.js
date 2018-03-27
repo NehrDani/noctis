@@ -1,9 +1,9 @@
 import React from 'react';
-import { render } from 'react-dom';
+import { hydrate } from 'react-dom';
 import App from '../shared/App';
 import './client.css';
 
-render(<App />, document.getElementById('root'));
+hydrate(<App />, document.getElementById('root'));
 
 if (module.hot) {
   module.hot.accept();
