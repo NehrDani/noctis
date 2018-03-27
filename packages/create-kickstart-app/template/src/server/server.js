@@ -1,16 +1,12 @@
 import express from 'express';
 import path from 'path';
-import React from 'react';
 import render from './render';
 
 const app = express();
 app.disable('x-powered-by');
 
-app.use(
-  '/static',
-  express.static(path.join(process.cwd(), 'build/client/static'))
-);
-app.use('/', express.static('build/client'));
+app.use('/static', express.static(path.join(__dirname, '../client/static')));
+app.use('/public', express.static(path.join(__dirname, '../')));
 
 app.use(render);
 

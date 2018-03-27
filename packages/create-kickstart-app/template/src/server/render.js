@@ -1,10 +1,17 @@
+import { readFileSync } from 'fs';
+import React from 'react';
 import { renderToString } from 'react-dom/server';
 import App from '../shared/App';
 
-const DEV = process.env.NODE_ENV === 'development';
-const assetManifest = require(process.env.KICKSTART_ASSET_MANIFEST);
-const client = `/${assetManifest['client.js']}`;
-const styles = DEV
+const IS_DEV = process.env.NODE_ENV === 'development';
+const PUBLIC_PATH = process.env.PUBLIC_PATH || '/';
+const ASSET_MANIFEST = process.env.KICKSTART_ASSET_MANIFEST;
+
+const assetManifest = IS_DEV ? {} : JSON.parse(readFileSync(ASSET_MANIFEST));
+const client = IS_DEV
+  ? `${PUBLIC_PATH}/static/js/client.js`
+  : `/${assetManifest['client.js']}`;
+const styles = IS_DEV
   ? '' // in DEV the css is hot loaded
   : `<link href="/${assetManifest['client.css']}" rel="stylesheet" />`;
 
