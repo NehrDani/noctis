@@ -1,5 +1,5 @@
 {
-  "name": "noctis",
+  "name": "babel-preset-noctis",
   "version": "0.2.1",
   "publishConfig": {
     "access": "public"
