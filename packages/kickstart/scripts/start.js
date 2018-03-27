@@ -52,7 +52,7 @@ const start = async () => {
   const { name: appName } = require(paths.appPackageJson)
   // Set publicPath for development server.
   // On this path we serve the compiled assets.
-  const publicPath = `${protocol}://${host}:${portDev}`
+  const publicPath = `${protocol}://${host}:${portDev}/`
   const urls = prepareUrls(protocol, host, port)
 
   // This is our server process. Here we can start an stop the server

@@ -9,11 +9,11 @@ const ASSET_MANIFEST = process.env.KICKSTART_ASSET_MANIFEST;
 
 const assetManifest = IS_DEV ? {} : JSON.parse(readFileSync(ASSET_MANIFEST));
 const client = IS_DEV
-  ? `${PUBLIC_PATH}/static/js/client.js`
-  : `/${assetManifest['client.js']}`;
+  ? `${PUBLIC_PATH}static/js/client.js`
+  : `${assetManifest['client.js']}`;
 const styles = IS_DEV
   ? '' // in DEV the css is hot loaded
-  : `<link href="/${assetManifest['client.css']}" rel="stylesheet" />`;
+  : `<link href="${assetManifest['client.css']}" rel="stylesheet" />`;
 
 export default (req, res) => {
   res.status(200).send(`<!DOCTYPE html>
