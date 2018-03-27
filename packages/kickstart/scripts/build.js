@@ -97,6 +97,11 @@ const build = async () => {
   // if you're in it, you don't end up in Trash
   fs.emptyDirSync(paths.appBuild)
 
+  // Merge with public folder.
+  fs.copySync(paths.appPublic, paths.appBuild, {
+    dereference: true,
+  })
+
   // Paralellize compilings
   try {
     // Initially show output so the user has immediate feedback

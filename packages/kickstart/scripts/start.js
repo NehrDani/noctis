@@ -140,6 +140,11 @@ const start = async () => {
   // if you're in it, you don't end up in trash
   fs.emptyDirSync(paths.appBuild)
 
+  // Merge with public folder.
+  fs.copySync(paths.appPublic, paths.appBuild, {
+    dereference: true,
+  })
+
   // Create dev configs using our config factory.
   const serverConfig = createConfig('node', 'dev', publicPath)
   const clientConfig = createConfig('web', 'dev', publicPath)
