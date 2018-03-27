@@ -1,12 +1,12 @@
 {
-  "name": "@nehrdani/babel-preset-kickstart",
+  "name": "noctis",
   "version": "0.2.1",
   "publishConfig": {
     "access": "public"
   },
-  "description": "Babel presets used by Kickstart",
+  "description": "Babel presets used by Noctis",
   "author": "Daniel Nehring <nehrdani@gmail.com>",
-  "repository": "git@github.com:NehrDani/kickstart.git",
+  "repository": "git@github.com:NehrDani/noctis.git",
   "license": "MIT",
   "files": [
     "index.js"

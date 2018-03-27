@@ -1,6 +1,6 @@
-const errorOverlayMiddleware = require('@nehrdani/kickstart-dev-utils/errorOverlayMiddleware')
-const noopServiceWorkerMiddleware = require('@nehrdani/kickstart-dev-utils/noopServiceWorkerMiddleware')
-const ignoredFiles = require('@nehrdani/kickstart-dev-utils/ignoredFiles')
+const errorOverlayMiddleware = require('noctis-dev-utils/errorOverlayMiddleware')
+const noopServiceWorkerMiddleware = require('noctis-dev-utils/noopServiceWorkerMiddleware')
+const ignoredFiles = require('noctis-dev-utils/ignoredFiles')
 const paths = require('./paths')
 
 module.exports = ({ host = '0.0.0.0', port = 3001, protocol = 'http' }) => ({

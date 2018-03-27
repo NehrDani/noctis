@@ -8,7 +8,7 @@ const isEnv = env => ['development', 'test', 'production'].includes(env)
 const ENV = process.env.BABEL_ENV || process.env.NODE_ENV
 if (!isEnv(ENV)) {
   throw new Error(
-    'Using `babel-preset-kickstart-app` requires that you specify `NODE_ENV` or ' +
+    'Using `babel-preset-noctis-app` requires that you specify `NODE_ENV` or ' +
       '`BABEL_ENV` environment variables. Valid values are "development", ' +
       '"test", and "production". Instead, received: ' +
       JSON.stringify(ENV) +

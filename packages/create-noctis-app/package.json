@@ -1,18 +1,18 @@
 {
-  "name": "@nehrdani/create-kickstart-app",
+  "name": "noctis",
   "version": "0.2.0",
   "publishConfig": {
     "access": "public"
   },
   "description": "Build cutting-egde, isomorphic React applications with ease",
-  "repository": "git@github.com:NehrDani/kickstart.git",
+  "repository": "git@github.com:NehrDani/noctis.git",
   "author": "Daniel Nehring <nehrdani@gmail.com>",
   "license": "MIT",
   "engines": {
     "node": ">=8.0.0"
   },
   "bin": {
-    "create-kickstart-app": "./bin/createKickstartApp.js"
+    "create-noctis-app": "./bin/createNoctisApp.js"
   },
   "files": [
     "bin",
@@ -20,7 +20,7 @@
     "utils"
   ],
   "keywords": [
-    "kickstart",
+    "noctis",
     "react",
     "webpack",
     "ssr",

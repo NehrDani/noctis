@@ -55,7 +55,7 @@ const appPath = path.resolve(projectName)
 const appName = path.basename(appPath)
 
 const init = async (appPath, appName, useNpm) => {
-  console.log(`Creating a new Kickstart app in ${chalk.green(appPath)}.\n`)
+  console.log(`Creating a new Noctis app in ${chalk.green(appPath)}.\n`)
 
   // Create the app directory...
   await fs.ensureDir(appPath)

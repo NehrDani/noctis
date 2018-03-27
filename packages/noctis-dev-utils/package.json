@@ -1,11 +1,11 @@
 {
-  "name": "@nehrdani/kickstart-dev-utils",
+  "name": "noctis-dev-utils",
   "version": "0.7.0",
   "publishConfig": {
     "access": "public"
   },
-  "description": "Utilities and helpers used by Kickstart",
-  "repository": "git@github.com:NehrDani/kickstart.git",
+  "description": "Utilities and helpers used by Noctis",
+  "repository": "git@github.com:NehrDani/noctis.git",
   "author": "Daniel Nehring <nehrdani@gmail.com>",
   "license": "MIT",
   "engines": {

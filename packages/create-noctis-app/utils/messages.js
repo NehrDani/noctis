@@ -3,7 +3,7 @@ const { red, cyan, green } = require('chalk')
 const unsupportedNodeVersion = (current, needed) =>
   red(`
 You are running Node ${current}.
-Kickstart requires Node v${needed.version} or higher.
+Noctis requires Node v${needed.version} or higher.
 Please update your version of Node.
 `)
 
@@ -25,7 +25,7 @@ Please specify the project directory:
   ${cyan(script)} ${green('<project-directory>')}
 
 For Example:
-  ${cyan(script)} ${green('my-kickstart-app')}
+  ${cyan(script)} ${green('my-noctis-app')}
 
 Run ${cyan(`${script} --help`)} to see all options.
 `

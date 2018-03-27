@@ -6,7 +6,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 const ManifestPlugin = require('webpack-manifest-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const WatchMissingNodeModulesPlugin = require('@nehrdani/kickstart-dev-utils/WatchMissingNodeModulesPlugin')
+const WatchMissingNodeModulesPlugin = require('noctis-dev-utils/WatchMissingNodeModulesPlugin')
 const paths = require('./paths')
 const getClientEnv = require('./env')
 
@@ -25,7 +25,7 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
     // It enables caching results in ./node_modules/.cache/babel-loader/
     // directory for faster rebuilds.
     cacheDirectory: true,
-    presets: [require.resolve('@nehrdani/babel-preset-kickstart')],
+    presets: [require.resolve('babel-preset-noctis')],
   }
   const cssOptions = {
     minify: IS_PROD,
@@ -214,10 +214,7 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
           // When you save a file, the client will either apply hot updates (in case
           // of CSS changes), or refresh the page (in case of JS changes). When you
           // make a syntax error, this client will display a syntax error overlay.
-          IS_DEV &&
-            require.resolve(
-              '@nehrdani/kickstart-dev-utils/webpackHotDevClient'
-            ),
+          IS_DEV && require.resolve('noctis-dev-utils/webpackHotDevClient'),
           // Finally, this is your app's code:
           paths.clientSrc,
           // We include the app code last so that if there is a runtime error during

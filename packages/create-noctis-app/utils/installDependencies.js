@@ -3,7 +3,7 @@ const { spawn } = require('child_process')
 const ora = require('ora')
 const shouldUseYarn = require('./shouldUseYarn')
 
-const dependencies = ['react', 'react-dom', '@nehrdani/kickstart', 'express']
+const dependencies = ['react', 'react-dom', 'noctis', 'express']
 const spinner = ora()
 
 module.exports = (base, useNpm) =>

@@ -7,8 +7,8 @@ module.exports = async (appPath, appName) => {
     version: '0.1.0',
     private: true,
     scripts: {
-      start: 'kickstart start',
-      build: 'kickstart build',
+      start: 'noctis start',
+      build: 'noctis build',
     },
   }
 

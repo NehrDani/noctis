@@ -54,14 +54,14 @@ process.env.NODE_PATH = (process.env.NODE_PATH || '')
   .map(folder => path.resolve(appDirectory, folder))
   .join(path.delimiter)
 
-// Grab NODE_ENV and KICKSTART_* environment variables and prepare them to be
+// Grab NODE_ENV and NOCTIS_* environment variables and prepare them to be
 // injected into the application via DefinePlugin in Webpack configuration.
-const KICKSTART = /^KICKSTART_/i
+const NOCTIS = /^NOCTIS_/i
 
 const getClientEnvironment = publicPath => {
   // Stringify all values so we can feed into Webpack DefinePlugin
   const stringified = Object.keys(process.env)
-    .filter(key => KICKSTART.test(key))
+    .filter(key => NOCTIS.test(key))
     .reduce(
       (env, key) =>
         Object.assign({}, env, {
@@ -73,7 +73,7 @@ const getClientEnvironment = publicPath => {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
         PORT: JSON.stringify(process.env.PORT || 3000),
         HOST: JSON.stringify(process.env.HOST || '0.0.0.0'),
-        KICKSTART_ASSET_MANIFEST: JSON.stringify(paths.appAssets),
+        NOCTIS_ASSET_MANIFEST: JSON.stringify(paths.appAssets),
         PUBLIC_PATH: JSON.stringify(publicPath),
       }
     )

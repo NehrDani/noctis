@@ -1,14 +1,14 @@
-# kickstart-dev-utils
+# noctis-dev-utils
 
-This package includes some utilities used by [Kickstart](https://github.com/nehrdani/kickstart).<br>
+This package includes some utilities used by [Noctis](https://github.com/nehrdani/noctis).<br>
 
-## Usage in Kickstart Projects
+## Usage in Noctis Projects
 
-These utilities come by default with [Kickstart](https://github.com/nehrdani/kickstart), which includes it by default. **You don’t need to install it separately in Kickstart projects.**
+These utilities come by default with [Noctis](https://github.com/nehrdani/noctis), which includes it by default. **You don’t need to install it separately in Noctis projects.**
 
-## Usage Outside of Kickstart
+## Usage Outside of Noctis
 
-If you don’t use Kickstart, or if you, you may keep using these utilities. Their development will be aligned with Kickstart, so major versions of these utilities may come out relatively often. Feel free to fork or copy and paste them into your projects if you’d like to have more control over them, or feel free to use the old versions.
+If you don’t use Noctis, or if you, you may keep using these utilities. Their development will be aligned with Noctis, so major versions of these utilities may come out relatively often. Feel free to fork or copy and paste them into your projects if you’d like to have more control over them, or feel free to use the old versions.
 
 ### Entry Points
 
@@ -41,7 +41,7 @@ Returns an object that contains to functions to control a forked process.
 - `stop`: kills the forked process so it can be restarted
 
 ```js
-const createServerProcess = require('@nehrdani/kickstart-dev-utils/createServerProcess')
+const createServerProcess = require('noctis-dev-utils/createServerProcess')
 const serverProcess = createServerProcess('../build/server')
 
 // After compile
@@ -56,7 +56,7 @@ serverProcess.stop()
 Returns a Promise resolving to an object containing the `protocol`, `host` and `port` and `portDev` that are defined in the `process.env` or the ports selected by the prompt if the user confirms it is okay to do. If the port is taken and the user has refused to use another port, or if the terminal is not interactive and can’t present user with the choice, resolves to `null`.
 
 ```js
-const getServerSettings = require('@nehrdani/kickstart-dev-utils/getServerSettings')
+const getServerSettings = require('noctis-dev-utils/getServerSettings')
 
 getServerSettings().then(settings => {
   // Do whatever you need the settings for
@@ -79,10 +79,10 @@ Takes a string for the `appName` to tell your name on the message. To provide th
 It prints a message to the console containing the local, and network url.
 
 ```js
-const printInstructions = require('@nehrdani/kickstart-dev-utils/printInstructions')
+const printInstructions = require('noctis-dev-utils/printInstructions')
 
 // after compile
-printInstructions('my-kickstart-app', prepareUrls())
+printInstructions('my-noctis-app', prepareUrls())
 ```
 
 #### `webpackHotDevClient`

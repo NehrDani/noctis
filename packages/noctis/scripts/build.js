@@ -15,15 +15,15 @@ require('../config/env')
 const webpack = require('webpack')
 const fs = require('fs-extra')
 const chalk = require('chalk')
-const clearConsole = require('@nehrdani/kickstart-dev-utils/clearConsole')
-const checkRequiredFiles = require('@nehrdani/kickstart-dev-utils/checkRequiredFiles')
+const clearConsole = require('noctis-dev-utils/clearConsole')
+const checkRequiredFiles = require('noctis-dev-utils/checkRequiredFiles')
 const {
   measureFileSizesBeforeBuild,
   printFileSizesAfterBuild,
-} = require('@nehrdani/kickstart-dev-utils/FileSizeReporter')
-const formatWebpackMessages = require('@nehrdani/kickstart-dev-utils/formatWebpackMessages')
-const printBuildError = require('@nehrdani/kickstart-dev-utils/printBuildError')
-const logger = require('@nehrdani/kickstart-dev-utils/logger')
+} = require('noctis-dev-utils/FileSizeReporter')
+const formatWebpackMessages = require('noctis-dev-utils/formatWebpackMessages')
+const printBuildError = require('noctis-dev-utils/printBuildError')
+const logger = require('noctis-dev-utils/logger')
 const createConfig = require('../config/createConfig')
 const paths = require('../config/paths')
 

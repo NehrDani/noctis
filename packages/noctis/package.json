@@ -1,18 +1,18 @@
 {
-  "name": "@nehrdani/kickstart",
+  "name": "noctis",
   "version": "0.7.3",
   "publishConfig": {
     "access": "public"
   },
   "description": "Build cutting-egde, isomorphic React applications with ease",
-  "repository": "git@github.com:NehrDani/kickstart.git",
+  "repository": "git@github.com:NehrDani/noctis.git",
   "author": "Daniel Nehring <nehrdani@gmail.com>",
   "license": "MIT",
   "engines": {
     "node": ">=8.0.0"
   },
   "bin": {
-    "kickstart": "./bin/kickstart.js"
+    "noctis": "./bin/noctis.js"
   },
   "files": [
     "bin",
@@ -20,7 +20,7 @@
     "scripts"
   ],
   "keywords": [
-    "kickstart",
+    "noctis",
     "react",
     "webpack",
     "ssr",
@@ -28,8 +28,8 @@
     "babel"
   ],
   "dependencies": {
-    "@nehrdani/babel-preset-kickstart": "^0.2.0",
-    "@nehrdani/kickstart-dev-utils": "^0.6.0",
+    "babel-preset-noctis": "^0.2.0",
+    "noctis-dev-utils": "^0.6.0",
     "autoprefixer": "^8.1.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
