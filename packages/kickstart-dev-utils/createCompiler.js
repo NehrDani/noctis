@@ -18,7 +18,7 @@ module.exports = (webpack, config, emitter) => {
   // Whether or not you have warnings or errors, you will get this event.
   compiler.plugin('done', async stats => {
     // We have switched off the default Webpack output in WebpackDevServer
-    // options so we are going to "massage" the warnings and errors
+    // options so we are going to "message" the warnings and errors
     // and present them in a readable focused way
     const { errors, warnings } = formatWebpackMessages(stats.toJson({}, true))
 
