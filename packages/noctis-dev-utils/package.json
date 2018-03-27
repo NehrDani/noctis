@@ -1,6 +1,6 @@
 {
   "name": "noctis-dev-utils",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "publishConfig": {
     "access": "public"
   },
@@ -12,12 +12,24 @@
     "node": ">=8.0.0"
   },
   "files": [
-    "compilerStates.js",
+    "checkRequiredFiles.js",
+    "choosePort.js",
+    "clearConsole.js",
     "createCompiler.js",
     "createServerProcess.js",
+    "createState.js",
+    "errorOverlayMiddleware.js",
+    "FileSizeReporter.js",
+    "formatWebpackMessages.js",
     "getServerSettings.js",
+    "ignoredFiles.js",
+    "launchEditorEndpoint.js",
     "logger.js",
+    "noopServiceWorkerMiddleware.js",
+    "prepareUrls.js",
+    "printBuildError.js",
     "printInstructions.js",
+    "WatchMissingNodeModulesPlugin.js",
     "webpackHotDevClient.js"
   ],
   "dependencies": {
