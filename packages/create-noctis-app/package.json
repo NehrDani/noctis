@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "description": "Build cutting-egde, isomorphic React applications with ease",
+  "description": "Build bleeding-egde, isomorphic React applications with ease.",
   "repository": "git@github.com:NehrDani/noctis.git",
   "author": "Daniel Nehring <nehrdani@gmail.com>",
   "license": "MIT",
