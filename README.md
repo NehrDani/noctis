@@ -2,6 +2,15 @@
 
 Build bleeding-egde, isomorphic React applications with ease.
 
+Universal JavaScript applications are tough to setup. Either you buy into a framework like [Next.js](https://github.com/zeit/next.js), fork a boilerplate, or set things up yourself. Noctis is a tool that gives you the awesome developer experience of [create-react-app](https://github.com/facebook/create-react-app) and enhances it with the configuration needed for SSR. Everything else is up to you.
+
+**Noctis comes with some features:**
+
+* :fire: Hot Module Replacement for the client and auto restarts for the server. No manual reloads or restarts necessary
+* Comes with ESNext (ES6+) JavaScript goodies (through `babel-preset-noctis`)
+* It already uses S(CSS) Modules
+* And all goodies from [create-react-app](https://github.com/facebook/create-react-app)
+
 * [Creating an App](#creating-an-app) – How to create a new app.
 
 ## Quick Overview
