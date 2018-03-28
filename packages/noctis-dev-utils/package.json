@@ -32,6 +32,11 @@
     "WatchMissingNodeModulesPlugin.js",
     "webpackHotDevClient.js"
   ],
+  "keywords": [
+    "noctis",
+    "tools",
+    "utils"
+  ],
   "dependencies": {
     "chalk": "^2.3.2",
     "react-dev-utils": "^5.0.0",

@@ -11,6 +11,11 @@
   "files": [
     "index.js"
   ],
+  "keywords": [
+    "babel",
+    "noctis",
+    "react"
+  ],
   "dependencies": {
     "babel-plugin-dynamic-import-node": "^1.2.0",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
