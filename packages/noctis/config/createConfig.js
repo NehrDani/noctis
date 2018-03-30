@@ -107,7 +107,6 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
             {
               test: /\.js$/,
               include: [paths.appSrc],
-              exclude: [/[/\\\\]node_modules[/\\\\]/],
               use: [
                 // This loader parallelizes code compilation, it is optional but
                 // improves compile time on larger projects
