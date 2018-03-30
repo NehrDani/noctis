@@ -58,7 +58,7 @@ process.env.NODE_PATH = (process.env.NODE_PATH || '')
 // injected into the application via DefinePlugin in Webpack configuration.
 const NOCTIS = /^NOCTIS_/i
 
-const getClientEnvironment = publicPath => {
+const getClientEnvironment = (publicPath = '/') => {
   // Stringify all values so we can feed into Webpack DefinePlugin
   const stringified = Object.keys(process.env)
     .filter(key => NOCTIS.test(key))
