@@ -17,6 +17,7 @@ module.exports = {
   clientSrc: resolveApp('src/client/client.js'),
   serverSrc: resolveApp('src/server/server.js'),
   appSrc: resolveApp('src'),
+  testsSetup: resolveApp('src/setupTests.js'),
   appPackageJson: resolveApp('package.json'),
   appNodeModules: resolveApp('node_modules'),
 }
