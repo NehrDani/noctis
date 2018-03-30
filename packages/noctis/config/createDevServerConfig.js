@@ -3,7 +3,7 @@ const noopServiceWorkerMiddleware = require('noctis-dev-utils/noopServiceWorkerM
 const ignoredFiles = require('noctis-dev-utils/ignoredFiles')
 const paths = require('./paths')
 
-module.exports = ({ host = '0.0.0.0', port = 3001, protocol = 'http' }) => ({
+module.exports = ({ host = 'localhost', port = 3001, protocol = 'http' }) => ({
   // Enable gzip compression of generated files.
   compress: true,
   // Enable CORS

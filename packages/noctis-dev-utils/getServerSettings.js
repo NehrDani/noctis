@@ -1,7 +1,7 @@
 const choosePort = require('./choosePort')
 
 const getServerSettings = async () => {
-  const host = process.env.HOST || '0.0.0.0'
+  const host = process.env.HOST || 'localhost'
   const defaultPort = parseInt(process.env.PORT, 10) || 3000
   const defaultPortDev = defaultPort + 1
   const protocol = process.env.HTTPS ? 'https' : 'http'

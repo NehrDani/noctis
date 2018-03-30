@@ -72,7 +72,7 @@ const getClientEnvironment = publicPath => {
         // Most importantly, it switches React into the correct mode.
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
         PORT: JSON.stringify(process.env.PORT || 3000),
-        HOST: JSON.stringify(process.env.HOST || '0.0.0.0'),
+        HOST: JSON.stringify(process.env.HOST || 'localhost'),
         ASSET_MANIFEST: JSON.stringify(paths.appAssets),
         PUBLIC_PATH: JSON.stringify(publicPath),
       }
