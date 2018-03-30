@@ -73,7 +73,7 @@ const getClientEnvironment = publicPath => {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
         PORT: JSON.stringify(process.env.PORT || 3000),
         HOST: JSON.stringify(process.env.HOST || '0.0.0.0'),
-        NOCTIS_ASSET_MANIFEST: JSON.stringify(paths.appAssets),
+        ASSET_MANIFEST: JSON.stringify(paths.appAssets),
         PUBLIC_PATH: JSON.stringify(publicPath),
       }
     )

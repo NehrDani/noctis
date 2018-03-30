@@ -5,7 +5,7 @@ import App from '../shared/App';
 
 const IS_DEV = process.env.NODE_ENV === 'development';
 const PUBLIC_PATH = process.env.PUBLIC_PATH || '/';
-const ASSET_MANIFEST = process.env.NOCTIS_ASSET_MANIFEST;
+const ASSET_MANIFEST = process.env.ASSET_MANIFEST;
 
 const assetManifest = IS_DEV ? {} : JSON.parse(readFileSync(ASSET_MANIFEST));
 const client = IS_DEV
