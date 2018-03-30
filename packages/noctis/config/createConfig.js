@@ -79,7 +79,7 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
         process.env.NODE_PATH.split(path.delimiter).filter(Boolean)
       ),
       // These are the reasonable defaults supported by the Node ecosystem.
-      extensions: ['.js', '.json'],
+      extensions: ['.js', '.mjs', '.json'],
     },
     module: {
       strictExportPresence: true,
@@ -105,7 +105,7 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
             // Process application JS with Babel.
             // The preset includes JSX, Flow, and some ESnext features.
             {
-              test: /\.js$/,
+              test: /\.(js|jsx)$/,
               include: [paths.appSrc],
               use: [
                 // This loader parallelizes code compilation, it is optional but
