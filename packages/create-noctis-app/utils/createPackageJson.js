@@ -8,6 +8,7 @@ module.exports = async (appPath, appName) => {
     private: true,
     scripts: {
       start: 'noctis start',
+      test: 'noctis test',
       build: 'noctis build',
     },
   }
