@@ -65,6 +65,7 @@ my-app
     └── shared
         └── App.css
         └── App.js
+        └── App.test.js
         └── logo.svg
 ```
 
@@ -81,6 +82,11 @@ Inside the newly created project, you can run some built-in commands:
 
 Runs the app in development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+### `npm test` or `yarn test`
+
+Runs the test watcher (Jest) in an interactive mode.
+By default, runs tests related to files changed since the last commit.
 
 ### `npm run build` or `yarn build`
 

@@ -14,6 +14,11 @@ Please refer to its documentation:
 Runs the app in development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
+### `npm test` or `yarn test`
+
+Runs the test watcher (Jest) in an interactive mode.
+By default, runs tests related to files changed since the last commit.
+
 ### `npm run build` or `yarn build`
 
 Builds the app for production to the `build` folder.<br>
