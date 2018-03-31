@@ -9,7 +9,7 @@ process.on('unhandledRejection', err => {
 
 const { spawnSync } = require('child_process')
 
-const isScript = x => ['start', 'build'].includes(x)
+const isScript = x => ['start', 'test', 'build'].includes(x)
 const [script, ...args] = process.argv.slice(2)
 
 if (isScript(script)) {

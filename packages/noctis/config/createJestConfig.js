@@ -38,6 +38,7 @@ module.exports = () => {
 
   const config = {
     collectCoverageFrom: ['src/**/*.{js,mjs}'],
+    setupFiles: [path.resolve(__dirname, 'polyfills.js')],
     setupTestFrameworkScriptFile: setupTestsFile,
     testMatch: [
       '<rootDir>/src/**/__tests__/**/*.{js,mjs}',
@@ -46,8 +47,11 @@ module.exports = () => {
     testEnvironment: 'node',
     testURL: 'http://localhost',
     transform: {
-      '^.+\\.(js|mjs)$': path.resolve('config/jest/babelTransform.js'),
-      '^(?!.*\\.(js|mjs|json)$)': path.resolve('config/jest/fileTransform.js'),
+      '^.+\\.(js|mjs)$': path.resolve(__dirname, 'jest/babelTransform.js'),
+      '^(?!.*\\.(js|mjs|json)$)': path.resolve(
+        __dirname,
+        'jest/fileTransform.js'
+      ),
     },
     transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(js|mjs)$'],
     moduleNameMapper: {
@@ -73,7 +77,7 @@ module.exports = () => {
   const unsupportedKeys = Object.keys(overrides).filter(
     key => !supportedKeys.includes(key)
   )
-  const isOverridingSetupFile = overrides.includes(
+  const isOverridingSetupFile = unsupportedKeys.includes(
     'setupTestFrameworkScriptFile'
   )
 
