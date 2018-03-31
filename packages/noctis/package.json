@@ -1,6 +1,6 @@
 {
   "name": "noctis",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "publishConfig": {
     "access": "public"
   },
@@ -32,7 +32,7 @@
     "babel-core": "^6.26.0",
     "babel-jest": "^22.4.3",
     "babel-loader": "^7.1.4",
-    "babel-preset-noctis": "^0.3.0",
+    "babel-preset-noctis": "^0.3.1",
     "babel-runtime": "^6.26.0",
     "case-sensitive-paths-webpack-plugin": "^2.1.2",
     "chalk": "^2.3.2",
@@ -43,7 +43,7 @@
     "fs-extra": "^5.0.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^22.4.3",
-    "noctis-dev-utils": "^0.8.0",
+    "noctis-dev-utils": "^0.8.1",
     "node-sass": "^4.7.2",
     "object-assign": "^4.1.1",
     "postcss-flexbugs-fixes": "^3.3.0",
