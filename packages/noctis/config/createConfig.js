@@ -17,7 +17,7 @@ module.exports = (target = 'web', env = 'dev', publicPath = '/') => {
   const IS_PROD = env === 'prod'
   const IS_DEV = env === 'dev'
 
-  const clientEnv = getClientEnv(publicPath)
+  const clientEnv = getClientEnv(publicPath, target)
 
   const babelOptions = {
     babelrc: false,

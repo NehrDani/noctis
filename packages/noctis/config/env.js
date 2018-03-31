@@ -58,7 +58,7 @@ process.env.NODE_PATH = (process.env.NODE_PATH || '')
 // injected into the application via DefinePlugin in Webpack configuration.
 const NOCTIS = /^NOCTIS_/i
 
-const getClientEnvironment = (publicPath = '/') => {
+const getClientEnvironment = (publicPath = '/', target = 'web') => {
   // Stringify all values so we can feed into Webpack DefinePlugin
   const stringified = Object.keys(process.env)
     .filter(key => NOCTIS.test(key))
@@ -75,6 +75,7 @@ const getClientEnvironment = (publicPath = '/') => {
         HOST: JSON.stringify(process.env.HOST || 'localhost'),
         ASSET_MANIFEST: JSON.stringify(paths.appAssets),
         PUBLIC_PATH: JSON.stringify(publicPath),
+        BUILD_TARGET: JSON.stringify(target),
       }
     )
 
