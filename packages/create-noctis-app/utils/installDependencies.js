@@ -1,20 +1,21 @@
 const chalk = require('chalk')
 const { spawn } = require('child_process')
 const ora = require('ora')
-const shouldUseYarn = require('./shouldUseYarn')
+const { installDependencies } = require('./messages')
 
 const dependencies = ['react', 'react-dom', 'noctis', 'express']
 const spinner = ora()
 
-module.exports = (base, useNpm) =>
+module.exports = (base, useYarn) =>
   new Promise((resolve, reject) => {
-    const useYarn = shouldUseYarn(useNpm)
     const cmd = useYarn ? 'yarnpkg' : 'npm'
     const args = useYarn
       ? ['add', ...dependencies]
       : ['install', '--save', '--loglevel', 'error', ...dependencies]
 
     const child = spawn(cmd, args, { stdio: 'ignore' })
+
+    console.log(installDependencies(dependencies))
 
     spinner.start()
 

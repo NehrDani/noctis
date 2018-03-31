@@ -18,7 +18,9 @@ const {
   missingProjectName,
   projectAlreadyExists,
   abortInstallation,
+  success,
 } = require('../utils/messages')
+const shouldUseYarn = require('../utils/shouldUseYarn')
 
 const argv = minimist(process.argv.slice(2), {
   boolean: ['help', 'version', 'use-npm'],
@@ -57,6 +59,8 @@ const appName = path.basename(appPath)
 const init = async (appPath, appName, useNpm) => {
   console.log(`Creating a new Noctis app in ${chalk.green(appPath)}.\n`)
 
+  const useYarn = shouldUseYarn(useNpm)
+
   // Create the app directory...
   await fs.ensureDir(appPath)
   // and cd into it
@@ -66,9 +70,11 @@ const init = async (appPath, appName, useNpm) => {
 
   console.log('Installing packages. This might take a while.')
 
-  await installDependencies(appPath, useNpm)
+  await installDependencies(appPath, useYarn)
 
   await copyTemplate(appPath, appName)
+
+  console.log(success(appName, appPath, useYarn ? 'yarn' : 'npm'))
 }
 
 try {
