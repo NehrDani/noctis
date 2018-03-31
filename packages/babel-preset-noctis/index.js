@@ -48,7 +48,7 @@ const plugins = [
     },
   ],
   // function* () { yield 42; yield 43; }
-  [
+  !IS_TEST && [
     require.resolve('babel-plugin-transform-regenerator'),
     {
       // Async functions are converted to generators by babel-preset-env
@@ -56,7 +56,7 @@ const plugins = [
     },
   ],
   // Adds syntax support for import()
-  require.resolve('babel-plugin-syntax-dynamic-import'),
+  !IS_TEST && require.resolve('babel-plugin-syntax-dynamic-import'),
   // The following two plugins are currently necessary to make React warnings
   // include more valuable information. They are included here because they are
   // currently not enabled in babel-preset-react. See the below threads for more info:
@@ -82,10 +82,10 @@ const plugins = [
 ].filter(Boolean)
 
 const presets = [
-  // Latest stable ECMAScript features and useres Node version
+  // Latest stable ECMAScript features and users Node version
   [
-    require.resolve('babel-preset-env'),
-    {
+    require('babel-preset-env').default,
+    !IS_TEST && {
       targets: {
         node: 'current',
         browsers: ['last 2 versions', 'not ie < 11'],
@@ -98,10 +98,15 @@ const presets = [
       // Do not transform modules to CJS
       modules: false,
     },
-  ],
+    IS_TEST && {
+      targets: {
+        node: 'current',
+      },
+    },
+  ].filter(Boolean),
   // JSX, Flow
   require.resolve('babel-preset-react'),
-].filter(Boolean)
+]
 
 module.exports = {
   presets,
