@@ -14,8 +14,8 @@ module.exports = () => {
     isDone: target => states[target].done,
     isInvalid: target => states[target].invalid,
     hasChanged: target => {
-      const isDone = target => states[target].done
-      const isInvalid = target => states[target].invalid
+      const isDone = states[target].done
+      const isInvalid = states[target].invalid
 
       return (!isDone && isInvalid) || (isDone && !isInvalid)
     },
